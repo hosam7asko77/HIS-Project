@@ -1,0 +1,22 @@
+server:
+  port: 9090
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/helth-app
+    username: root
+    password: hosam7asko
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:      
+        dialect: org.hibernate.dialect.MySQL5Dialect
+        format_sql: true 
+  mvc:
+    view:
+      prefix: /views/
+      suffix: .jsp
+
+  
