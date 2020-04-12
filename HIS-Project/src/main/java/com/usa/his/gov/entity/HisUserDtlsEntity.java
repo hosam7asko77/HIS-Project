@@ -1,12 +1,15 @@
 package com.usa.his.gov.entity;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -52,10 +55,10 @@ public class HisUserDtlsEntity {
 	private Long phoneNumber;
 	@Column(name = "ROLE_TYPE", length = 10, nullable = false)
 	private String roleType;
-	@Column(name = "STATUS", length = 8 , nullable = false)
-	private String status;
+	@Column(name = "STATUS", length = 8 , nullable = false )
+	private Boolean status;
 	@Column(name = "ACTIVE_SW", length = 2)
-	private Character activeSwitch;
+	private String activeSwitch;
 	@Temporal(TemporalType.TIMESTAMP)
 	@CreationTimestamp
 	@Column(name = "CREATE_DATE", insertable = true, updatable = false)
@@ -64,4 +67,9 @@ public class HisUserDtlsEntity {
 	@UpdateTimestamp
 	@Column(name = "UPDATE_DATE", insertable = false, updatable = true)
 	private Date updatedDate;
+	@OneToMany(mappedBy = "dtlsEntity",cascade = {CascadeType.DETACH,
+			CascadeType.REFRESH,
+			CascadeType.DETACH})
+	private List<HisPlanEntity> planEntities;
+	
 }

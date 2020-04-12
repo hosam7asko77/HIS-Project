@@ -9,5 +9,6 @@ package com.usa.his.gov.constant;
 public class AdminControllerConstant {
 	public static final String DETAILS = "details";
 	public static final String REGISTER_FORM_PAGE = "app-register-page";
+	public static final String VIEW_USERS = "manage-users-page";
 
 }

@@ -5,6 +5,6 @@ package com.usa.his.gov.constant;
  *
  */
 public class HisServiceConstant {
-	public static final Character STATUS = 'N';
+	public static final String ACTIVE_STATUS = "N";
 
 }

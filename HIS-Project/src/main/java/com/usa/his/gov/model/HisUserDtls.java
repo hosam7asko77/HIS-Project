@@ -1,5 +1,7 @@
 package com.usa.his.gov.model;
 
+import java.util.Date;
+
 import org.springframework.format.annotation.DateTimeFormat;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
@@ -19,13 +21,14 @@ public class HisUserDtls {
 	private String lastName;
 	private String email;
 	private String password;
-	@DateTimeFormat(pattern = "MM/dd/yyyy")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-dd-MM")
-	private Data Dob;
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	@JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd")
+	private Date dob;
 	private String gender;
 	private String ssn;
 	private Long phoneNumber;
 	private String roleType;
-	private String status;
-	private Character activeSwitch;
+	private Boolean status;
+	private String activeSwitch;
+	
 }
