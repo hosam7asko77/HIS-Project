@@ -147,7 +147,7 @@
 						<div class="row no-gutters align-items-center">
 							<div class="col-12 col-lg-9">
 								<div class="medilife-appointment-form">
-									<form:form id="userDetails" action="processForm" method="post"
+									<form:form id="userDetails" action="/Admin/Manager/processForm" method="post"
 										modelAttribute="details">
 										<div class="row align-items-end">
 										<form:hidden path="userId"/>

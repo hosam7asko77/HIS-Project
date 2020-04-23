@@ -18,5 +18,16 @@ spring:
     view:
       prefix: /views/
       suffix: .jsp
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: mazadiproject1993@gmail.com
+    password: hosam7asko77
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
   

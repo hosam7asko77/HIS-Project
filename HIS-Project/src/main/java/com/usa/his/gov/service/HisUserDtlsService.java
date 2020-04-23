@@ -2,10 +2,12 @@ package com.usa.his.gov.service;
 
 import java.util.List;
 
+import org.springframework.security.core.userdetails.UserDetailsService;
+
 import com.usa.his.gov.exception.HisException;
 import com.usa.his.gov.model.HisUserDtls;
 
-public interface HisUserDtlsService {
+public interface HisUserDtlsService extends UserDetailsService{
 
 	/**
 	 * 
@@ -41,11 +43,10 @@ public interface HisUserDtlsService {
 
 	/**
 	 * 
-	 * @param status
 	 * @return
 	 * @throws HisException
 	 */
-	public List<HisUserDtls> getAllUsersByStatus(String status) throws HisException;
+	public List<HisUserDtls> getAllUsersByStatus(Boolean status) throws HisException;
 
 	/**
 	 * 
@@ -54,7 +55,7 @@ public interface HisUserDtlsService {
 	 * @return
 	 * @throws HisException
 	 */
-	public HisUserDtls updateUser(String pId) throws HisException;
+	public HisUserDtls updateUser(HisUserDtls hisUserDtls) throws HisException;
 
 	/**
 	 * 

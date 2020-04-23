@@ -4,9 +4,17 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Access Denied</title>
 </head>
 <body>
+<h1>
+	You Don't have Permission to Access this page 
+</h1>
+<hr>
+
+	<p>
+	<a href="${pageContext.request.contextPath}/">Back To Home</a>
+	</p>
 
 </body>
 </html>

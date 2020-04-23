@@ -1,0 +1,17 @@
+<h2> Hi $firstName</h2><br/>
+<p>Your password is : $password</p>
+<p>Plase don't forget agen</p>
+</a><br/><br/>
+Thank you! and we are witing for you inside
+<h1>Plase verify your email address</h1>
+<h2> Hi $firstName</h2><br/>
+<p>Thank you for registering with our app . To complet register process and be able to log in</p>
+<p>Plase Folowing  below instruction</p>
+<p>1 : Copy Below Temporary Password : </p>
+<b>$temPassword</b> 
+<p>2 :click on the follwing link: <p>
+<a href='http://localhost:9090/Admin/Manager/showSetPassword?email=$email'>
+Finel step to complet registeration
+</a><br/><br/>
+<img src="cid:logoImage" width="200px" height="70px">
+Thank you! and we are wating for you inside

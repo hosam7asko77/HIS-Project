@@ -14,8 +14,11 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import com.usa.his.gov.config.PlanIdSequenceGenerator;
 
 import lombok.Data;
@@ -33,7 +36,7 @@ public class HisPlanEntity {
             @Parameter(name = PlanIdSequenceGenerator.INCREMENT_PARAM, value = "1"),
             @Parameter(name = PlanIdSequenceGenerator.VALUE_PREFIX_PARAMETER, value = "HIS_Plan_"),
             @Parameter(name = PlanIdSequenceGenerator.NUMBER_FORMAT_PARAMETER, value = "%05d") })
-    @Column(name = "Plan_Id",length = 15)
+    @Column(name = "Plan_Id",length = 20)
 	private String planId;
 	@Column(name = "Plan_Name", length = 30, nullable = false)
 	private String planName;
@@ -45,7 +48,15 @@ public class HisPlanEntity {
 	@Column(name = "Plan_End_Date")
 	@Temporal(TemporalType.DATE)
 	private Date endDate;
-	@ManyToOne(cascade = CascadeType.ALL)
+	@Temporal(TemporalType.TIMESTAMP)
+	@CreationTimestamp
+	@Column(name = "CREATE_DATE", insertable = true, updatable = false)
+	private Date createdDate;
+	@Temporal(TemporalType.TIMESTAMP)
+	@UpdateTimestamp
+	@Column(name = "UPDATE_DATE", insertable = false, updatable = true)
+	private Date updatedDate;
+	@ManyToOne(cascade = {CascadeType.DETACH,CascadeType.REFRESH})
 	@JoinColumn(name = "User_Id")
 	private HisUserDtlsEntity dtlsEntity;
 

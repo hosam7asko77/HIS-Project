@@ -114,7 +114,7 @@
 		</div>
 	</header>
 	<!-- ***** Header Area End ***** -->
-	Showing
+	
 	<!-- ***** Breadcumb Area Start ***** -->
 	<section class="breadcumb-area bg-img gradient-background-overlay"
 		style="background-image: url(/img/bg-img/breadcumb1.jpg);">
@@ -124,6 +124,7 @@
 					<div class="breadcumb-content">
 						<h3 class="breadcumb-title">View Accounts</h3>
 						<p>All Accounts Details</p>
+						<p>${Msg}</p>
 					</div>
 				</div>
 			</div>
