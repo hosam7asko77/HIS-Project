@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.usa.his.gov.exception.HisException;
-
 @ControllerAdvice
 public class CustomizeResponseExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(Exception.class)
@@ -26,7 +24,7 @@ public class CustomizeResponseExceptionHandler extends ResponseEntityExceptionHa
 								HttpStatus
 								.INTERNAL_SERVER_ERROR);
 	}
-	@ExceptionHandler(HisException.class)
+	@ExceptionHandler(HisExceptionRest.class)
 	public final ResponseEntity<Object> handleNotFoundException(Exception ex,WebRequest request){
 		ResponseExceptionModel exeptionResponse=new ResponseExceptionModel(
 					new Date(), ex.getMessage(), 

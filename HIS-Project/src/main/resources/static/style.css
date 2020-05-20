@@ -1,37 +1,37 @@
 /* Variables */
 /* mixin */
 /* ----------------------------------------------------------
-:: Template Name: Medilife - Medical & Health Template
-:: Author: Colorlib
-:: Author URL: https://colorlib.com
-:: Version: 1.0.0
-:: Created: 04 March 2018
-:: Last Updated: 04 March 2018
----------------------------------------------------------- */
+	:: Template Name: Medilife - Medical & Health Template
+	:: Author: Colorlib
+	:: Author URL: https://colorlib.com
+	:: Version: 1.0.0
+	:: Created: 04 March 2018
+	:: Last Updated: 04 March 2018
+	---------------------------------------------------------- */
 /* [ -- Master Stylesheet -- ] */
 /* ------------- Index of Stylesheet -------------
-:: 1.0 Import Fonts
-:: 2.0 Import All CSS
-:: 3.0 Base CSS
-:: 4.0 Header Area CSS
-:: 5.0 Welcome Area CSS
-:: 6.0 Book An Appoinment Area
-:: 7.0 About Us Area CSS
-:: 8.0 Service Area CSS
-:: 9.0 Gallery Area CSS
-:: 10.0 Features Area CSS
-:: 11.0 Emergency Area CSS
-:: 12.0 Footer Area CSS
-:: 13.0 Breadcumb Area CSS
-:: 14.0 Video Area CSS
-:: 15.0 Tabs Area CSS
-:: 16.0 Services Area CSS
-:: 17.0 Single Benefits Area CSS
-:: 18.0 CTA Area CSS
-:: 19.0 Blog Area CSS
-:: 20.0 Contact Area CSS
-:: 21.0 Shortcode Area CSS
------------------------------------------------- */
+	:: 1.0 Import Fonts
+	:: 2.0 Import All CSS
+	:: 3.0 Base CSS
+	:: 4.0 Header Area CSS
+	:: 5.0 Welcome Area CSS
+	:: 6.0 Book An Appoinment Area
+	:: 7.0 About Us Area CSS
+	:: 8.0 Service Area CSS
+	:: 9.0 Gallery Area CSS
+	:: 10.0 Features Area CSS
+	:: 11.0 Emergency Area CSS
+	:: 12.0 Footer Area CSS
+	:: 13.0 Breadcumb Area CSS
+	:: 14.0 Video Area CSS
+	:: 15.0 Tabs Area CSS
+	:: 16.0 Services Area CSS
+	:: 17.0 Single Benefits Area CSS
+	:: 18.0 CTA Area CSS
+	:: 19.0 Blog Area CSS
+	:: 20.0 Contact Area CSS
+	:: 21.0 Shortcode Area CSS
+	------------------------------------------------ */
 /* :: 1.0 Import Fonts */
 @import
 	url("https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900")
@@ -45,11 +45,7 @@
 
 @import url(css/magnific-popup.css);
 
-@import url(css/font-awesome.min.css);
-
 @import url(css/themify-icons.css);
-
-@import url(css/medilife-icons.css);
 
 @import url(css/nice-select.css);
 
@@ -61,11 +57,18 @@
 
 @import url(css/jquery.dataTables.min.css);
 
-@import url(css/fontawesome.min.css);
-
 @import url(css/material-design-iconic-font.css);
 
 @import url(css/material-design-iconic-font.min.css);
+
+/*    */
+@import url(css/mdi-font/css/material-design-iconic-font.min.css);
+
+@import url(css/font-awesome-4.7/css/font-awesome.min.css);
+
+@import url(css/select2.min.css);
+
+@import url(css/main.css);
 /* :: 3.0 Base CSS */
 * {
 	margin: 0;
@@ -147,37 +150,62 @@ a:hover, a:focus {
 {
 -webkit-transform
 
-
+	
+	
+	
+	
+	
 :
 
- 
-
+	
+	
+	 
+	
+	
+	
 rotate
 
-
+	
+	
+	
+	
+	
 (360
 deg
+
+	
+	
+	
 );
-
-
-    
-
 transform
 
-
+	
+	
+	
+	
+	
 :
 
- 
-
+	
+	
+	 
+	
+	
+	
 rotate
 
-
+	
+	
+	
+	
+	
 (360
 deg
+
+	
+	
+	
 );
-
- 
-
 }
 }
 @
@@ -190,37 +218,62 @@ keyframes medilife-load { 0% {
 {
 -webkit-transform
 
-
+	
+	
+	
+	
+	
 :
 
- 
-
+	
+	
+	 
+	
+	
+	
 rotate
 
-
+	
+	
+	
+	
+	
 (360
 deg
+
+	
+	
+	
 );
-
-
-    
-
 transform
 
-
+	
+	
+	
+	
+	
 :
 
- 
-
+	
+	
+	 
+	
+	
+	
 rotate
 
-
+	
+	
+	
+	
+	
 (360
 deg
+
+	
+	
+	
 );
-
- 
-
 }
 }
 ul, ol {
@@ -2034,7 +2087,7 @@ medilife-application-search-area {
 	width: auto;
 	border: 2px solid #204690;
 	border-radius: 10px;
-	margin-right:-10px;
+	margin-right: -10px;
 	margin: auto;
 }
 
@@ -2060,8 +2113,8 @@ medilife-application-search-area {
 	position: absolute;
 	top: 0;
 	right: 0;
-	border-bottom-right-radius:10px;
-	border-top-right-radius:10px;
+	border-bottom-right-radius: 10px;
+	border-top-right-radius: 10px;
 	cursor: pointer;
 }
 
@@ -2517,50 +2570,60 @@ medilife-application-search-area {
 	{
 	color: #ffffff;
 }
+.searchbar {
+	margin-bottom: 1px;
+	margin-top: auto;
+	height: 60px;
+	background-color: #497cff;
+	border-radius: 30px;
+	padding: 10px;
+}
 
+.search_input {
+	color: white;
+	border: 0;
+	outline: 0;
+	background: none;
+	width: 0;
+	caret-color: transparent;
+	line-height: 40px;
+	transition: width 0.4s linear;
+}
 
-    .searchbar{
-    margin-bottom: 1px;
-    margin-top: auto;
-    height: 60px;
-    background-color: #497cff;
-    border-radius: 30px;
-    padding: 10px;
-    }
+.searchbar:hover>.search_input {
+	padding: 0 10px;
+	width: 250px;
+	caret-color: white;
+	transition: width 0.4s linear;
+}
 
-    .search_input{
-    color: white;
-    border: 0;
-    outline: 0;
-    background: none;
-    width: 0;
-    caret-color:transparent;
-    line-height: 40px;
-    transition: width 0.4s linear;
-    }
+.searchbar:hover>.search_icon {
+	background: white;
+	color: #e74c3c;
+}
 
-    .searchbar:hover > .search_input{
-    padding: 0 10px;
-    width: 250px;
-    caret-color:white;
-    transition: width 0.4s linear;
-    }
-
-    .searchbar:hover > .search_icon{
-    background: white;
-    color: #e74c3c;
-    }
-
-    .search_icon{
-    height: 40px;
-    width: 40px;
-    float: right;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-    color:white;
-    text-decoration:none;
-    }
+.search_icon {
+	height: 40px;
+	width: 40px;
+	float: right;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 50%;
+	color: white;
+	text-decoration: none;
+}
+.dtl-p{
+	color: black;
+	font-size: 15px; 
+	font-style: normal;
+}
+.dtl-span {
+	color: #2d2d2d;
+	position:relative;
+}
+.error {
+	color: red;
+} 
 
 /*# sourceMappingURL=style.css.map */

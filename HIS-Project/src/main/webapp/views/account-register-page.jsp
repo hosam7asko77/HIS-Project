@@ -68,10 +68,11 @@
 										id="email" placeholder="Example@gmail.com" size="5"/>
 									<p id="emailMsg" style="color: red;"></p>
 									<div class="input-group-icon">
+									<i class="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
 										<form:input path="dob"
 											cssClass="input--style-4 js-datepicker form-control border-top-0 border-right-0 border-left-0"
 											placeholder="Date of Birth" />
-										<i class="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
+										
 									</div>
 											<form:select path="gender" cssClass="form-control"
 												id="speciality2">
@@ -113,10 +114,11 @@
 	<!-- ***** Footer Area End ***** -->
 
 	<!-- jQuery (Necessary for All JavaScript Plugins) -->
-	<script
-		src="${pageContext.request.contextPath}/js/jquery/jquery-2.2.4.min.js"></script>
+	<!-- script
+		src="${pageContext.request.contextPath}/js/jquery/jquery-2.2.4.min.js"></script-->
+		<script src="${pageContext.request.contextPath}/js/jquery/jquery-3.5.0.js"></script>
+		<script src="${pageContext.request.contextPath}/js/jquery/jquery-migrate-3.1.0.js"></script>
 	<!-- Popper js -->
-	<script src="${pageContext.request.contextPath}/js/popper.min.js"></script>
 	<!-- Bootstrap js -->
 	<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
 	<script
@@ -127,12 +129,14 @@
 	<script src="${pageContext.request.contextPath}/js/plugins.js"></script>
 	<!-- Active js -->
 	<script src="${pageContext.request.contextPath}/js/active.js"></script>
+	<script src="${pageContext.request.contextPath}/js/map-active.js"></script>
+	<script src="${pageContext.request.contextPath}/js/popper.min.js"></script>
 	<!-- Google Maps -->
 	<script
 		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAwuyLRa1uKNtbgx6xAJVmWy-zADgegA2s"></script>
-	<script src="${pageContext.request.contextPath}/js/map-active.js"></script>
 	<script src="${pageContext.request.contextPath}/js/global.js"></script>
 	<script src="${pageContext.request.contextPath}/js/extra/register.js"></script>
+	<script src="${pageContext.request.contextPath}/js/select2.min.js"></script>
 
 </body>
 </html>

@@ -65,8 +65,16 @@
 												Application</a> <a class="dropdown-item" href="/AppRegister/getAllApp">All
 												Applications</a>
 										</div></li>
-									<li class="nav-item"><a class="nav-link"
-										href="about-us.html">About Us</a></li>
+																	<li class="nav-item dropdown"><a
+										class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+										role="button" data-toggle="dropdown" aria-haspopup="true"
+										aria-expanded="false">Data Collection</a>
+										<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+											<a class="dropdown-item" href="/DC/showCaseForm">Create
+												Case</a> <a class="dropdown-item"
+												href="/AppRegister/showSearchPage">Search For Case </a>
+												 <a class="dropdown-item" href="/AppRegister/getAllApp">View 
+												Case</a>
 									<li class="nav-item"><a class="nav-link"
 										href="services.html">Services</a></li>
 									<li class="nav-item"><a class="nav-link" href="blog.html">News</a>

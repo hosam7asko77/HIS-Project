@@ -18,7 +18,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
 import com.usa.his.gov.constant.HisConstant;
-import com.usa.his.gov.model.HisUserDtls;
+import com.usa.his.gov.user.model.HisUserDtls;
 
 /**
  * this class using to send email

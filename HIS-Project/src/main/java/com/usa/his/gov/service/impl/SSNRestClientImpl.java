@@ -6,10 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import com.usa.his.gov.controllers.HisAdminController;
+
 import com.usa.his.gov.exception.HisException;
 import com.usa.his.gov.model.response.SSNClientResponse;
 import com.usa.his.gov.service.SSNRestClientService;
+import com.usa.his.gov.user.controller.HisAdminController;
 /**
  * this class implement SSNRestClien Service using to send SSN to SSNAPI for Validation
  * @author hosam7asko

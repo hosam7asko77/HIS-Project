@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.usa.his.gov.constant.HisConstant;
+import com.usa.his.gov.user.controller.HisAdminController;
 
 /**
  * this is home controller class

@@ -1,5 +1,8 @@
 package com.usa.his.gov.controllers;
 
+import java.util.HashMap;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,13 +12,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.usa.his.gov.appregister.model.HisAppRegister;
+import com.usa.his.gov.appregister.service.HisAppRegisterService;
+import com.usa.his.gov.dc.service.HisCaseDtlservice;
 import com.usa.his.gov.exception.HisException;
-import com.usa.his.gov.model.HisAppRegister;
-import com.usa.his.gov.model.HisUserDtls;
+import com.usa.his.gov.model.IndvInfo;
+import com.usa.his.gov.model.PlanInfo;
+import com.usa.his.gov.model.response.HisMessageResponcetModel;
 import com.usa.his.gov.model.response.SSNClientResponse;
-import com.usa.his.gov.service.HisAppRegisterService;
-import com.usa.his.gov.service.HisUserDtlsService;
+import com.usa.his.gov.plan.model.HisPlan;
+import com.usa.his.gov.plan.service.HisPlanService;
+import com.usa.his.gov.service.EDRuleRestClientService;
 import com.usa.his.gov.service.SSNRestClientService;
+import com.usa.his.gov.user.model.HisUserDtls;
+import com.usa.his.gov.user.service.HisUserDtlsService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -43,24 +53,35 @@ public class HISRestController {
 	@Autowired
 	private HisUserDtlsService dtlsService;
 	/**
-	 * this method using to check email  when user try to complete registering
-	 * @param email
-	 * @return
-	 * @throws HisException
-	 */
-	/**
 	 * inject SSN Service to check ssn number  
 	 */
 	@Autowired
 	private SSNRestClientService ssnClient;
+	/**
+	 * inject  HisAppRegisterService 
+	 */
+	@Autowired
+	private HisAppRegisterService appService;
+	
+	/**
+	 * inject  HisAppRegisterService 
+	 */
+	@Autowired
+	private HisPlanService planService;
+	/**
+	 * inject HisCaseDtlservice create an object
+	 */
+	@Autowired
+	private HisCaseDtlservice caseService;
+	
+	@Autowired
+	EDRuleRestClientService edService;
 	/**
 	 * this method using to validation email address and return result eithe exist or not
 	 * @param email
 	 * @return
 	 * @throws HisException
 	 */
-	@Autowired
-	private HisAppRegisterService appService;
 	@ApiOperation(
 			value = "Validation email",
 			response = String.class,
@@ -143,7 +164,7 @@ public class HISRestController {
 	@ApiOperation(
 			value = "Get Application",
 			response = HisAppRegister.class,
-			tags = "Rest/getApplication",
+			tags = "RestApi/getApplication",
 			consumes = "Text",
 			produces = "application/json"
 			)
@@ -166,5 +187,86 @@ public class HISRestController {
 			return null;
 		}
 	}
+	/**
+	 * this method using to retrieve all plan from
+	 * @return
+	 * @throws HisException
+	 */
+	@ApiOperation(
+			value = "Get Plans",
+			response = HisAppRegister.class,
+			tags = "RestApi/getPlans",
+			consumes = "Text",
+			produces = "application/json"
+			)
+	@ApiResponses(value = {
+			@ApiResponse(code = 200,message = "Sucecss|OK"),
+			@ApiResponse(code = 401,message = "not authorized!"),
+			@ApiResponse(code = 403,message = "forbidden!!!"),
+			@ApiResponse(code = 404,message = "not found!!!"),
+			
+	})
+	@GetMapping(path = "/getPlans" ,produces = {"application/json","application/xml"})
+	public HashMap<String, String> getPlans() throws HisException{
+		HashMap<String, String> plans=new HashMap<String, String>(); 
+		log.info("HisAdminController getPlans() method starting");
+		List<HisPlan> returnValue = planService.getAllPlans();
+		for (HisPlan hisPlan : returnValue) {
+			plans.put(hisPlan.getPlanId(), hisPlan.getPlanName());
+		}
+		log.info("HisAdminController getPlans() method end");
+		return plans;
+	}
+	@ApiOperation(
+			value = "Check case exist for the app",
+			response = HisAppRegister.class,
+			tags = "RestApi/isCaseExist",
+			consumes = "Text",
+			produces = "application/json"
+			)
+	@ApiResponses(value = {
+			@ApiResponse(code = 200,message = "Sucecss|OK"),
+			@ApiResponse(code = 401,message = "not authorized!"),
+			@ApiResponse(code = 403,message = "forbidden!!!"),
+			@ApiResponse(code = 404,message = "not found!!!"),
+			
+	})
+	@GetMapping(path = "/isCaseExist",produces = {"application/json","application/xml"})
+	public HisMessageResponcetModel caseExistForApp(@RequestParam("appId") String appId) throws HisException {
+		
+		HisMessageResponcetModel messagModel = new HisMessageResponcetModel();
+		messagModel.setError(false);
+		messagModel.setMessage("you can create case for this application");
+		boolean returnValue = caseService.appExist(appId);
+		if (returnValue) {
+			messagModel.setError(true);
+			messagModel.setMessage("you can't create case for this application "+appId+" case alrady created ");
+		}
+		return messagModel;
+	}
+	@ApiOperation(
+			value = "Check Indvinfo",
+			response = PlanInfo.class,
+			tags = "RestApi/checkInf",
+			consumes = "Text",
+			produces = "application/json"
+			)
+	@ApiResponses(value = {
+			@ApiResponse(code = 200,message = "Sucecss|OK"),
+			@ApiResponse(code = 401,message = "not authorized!"),
+			@ApiResponse(code = 403,message = "forbidden!!!"),
+			@ApiResponse(code = 404,message = "not found!!!"),
+			
+	})
+	@GetMapping(path = "/checkInf",produces = {"application/json","application/xml"})
+	public PlanInfo getIndvInfo(@RequestParam("caseNumber") Integer caseNumber) throws HisException {
+		log.info("HisRestController getInv Start");
+		PlanInfo returnVInfo = edService.sendEDRequest(caseNumber);
+		System.out.println(returnVInfo.toString());
+		return returnVInfo;
+		
+
+	}
+	
 
 }
