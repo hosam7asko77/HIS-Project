@@ -19,6 +19,8 @@ public class HisConstant {
 	public static final String SET_PASSWORD_PROCESS_URL="/Admin/setPasswordProcess";
 	public static final String SHOW_ERROR_URL="/showErrorPage";
 	public static final String LOGIN_PAGE = "redirect:/login";
+	public static final String MESSAGE = "msg";
+	public static final String SUCCESS_MESSAGE = "case have been created successfuly";
 
 	
 }

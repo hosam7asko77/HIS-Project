@@ -15,14 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.usa.his.gov.appregister.model.HisAppRegister;
 import com.usa.his.gov.appregister.service.HisAppRegisterService;
 import com.usa.his.gov.dc.service.HisCaseDtlservice;
+import com.usa.his.gov.elg.service.EDRuleRestClientService;
 import com.usa.his.gov.exception.HisException;
-import com.usa.his.gov.model.IndvInfo;
-import com.usa.his.gov.model.PlanInfo;
 import com.usa.his.gov.model.response.HisMessageResponcetModel;
 import com.usa.his.gov.model.response.SSNClientResponse;
 import com.usa.his.gov.plan.model.HisPlan;
 import com.usa.his.gov.plan.service.HisPlanService;
-import com.usa.his.gov.service.EDRuleRestClientService;
 import com.usa.his.gov.service.SSNRestClientService;
 import com.usa.his.gov.user.model.HisUserDtls;
 import com.usa.his.gov.user.service.HisUserDtlsService;
@@ -73,9 +71,6 @@ public class HISRestController {
 	 */
 	@Autowired
 	private HisCaseDtlservice caseService;
-	
-	@Autowired
-	EDRuleRestClientService edService;
 	/**
 	 * this method using to validation email address and return result eithe exist or not
 	 * @param email
@@ -244,29 +239,7 @@ public class HISRestController {
 		}
 		return messagModel;
 	}
-	@ApiOperation(
-			value = "Check Indvinfo",
-			response = PlanInfo.class,
-			tags = "RestApi/checkInf",
-			consumes = "Text",
-			produces = "application/json"
-			)
-	@ApiResponses(value = {
-			@ApiResponse(code = 200,message = "Sucecss|OK"),
-			@ApiResponse(code = 401,message = "not authorized!"),
-			@ApiResponse(code = 403,message = "forbidden!!!"),
-			@ApiResponse(code = 404,message = "not found!!!"),
-			
-	})
-	@GetMapping(path = "/checkInf",produces = {"application/json","application/xml"})
-	public PlanInfo getIndvInfo(@RequestParam("caseNumber") Integer caseNumber) throws HisException {
-		log.info("HisRestController getInv Start");
-		PlanInfo returnVInfo = edService.sendEDRequest(caseNumber);
-		System.out.println(returnVInfo.toString());
-		return returnVInfo;
-		
 
-	}
 	
 
 }

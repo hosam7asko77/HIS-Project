@@ -1,4 +1,4 @@
-package com.usa.his.gov.model;
+package com.usa.his.gov.elg.model;
 
 import lombok.Data;
 
@@ -9,6 +9,5 @@ public class IndvInfo {
 	private String indvDob;
 	private String planName;
 	private String isEmployed;
-	private PlanInfo planInfo;
 
 }

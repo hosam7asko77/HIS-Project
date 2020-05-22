@@ -1,4 +1,4 @@
-package com.usa.his.gov.entity;
+package com.usa.his.gov.elg.entity;
 
 import java.util.Date;
 
@@ -24,24 +24,24 @@ public class ElgDetailsEntity {
 	@Column(name="ED_TRACE_ID",length = 19)
 	private Integer edTraceId;
 	@Column(name="BENEFIT_AMT")
-	private Integer benefitAmt;
+	private Double benefitAmount;
 	@Column(name="CASE_NUMBER",length = 19)
 	private Integer caseNumber;
 	@Temporal(TemporalType.DATE)
 	@Column(name="CREATE_DT")
 	private Date createdDate;
 	@Column(name="DENIAL_REASON",length = 255)
-	private String denialReason;
+	private String denialReson;
 	@Temporal(TemporalType.DATE)
 	@Column(name = "PLAN_END_DT")
 	private Date planEndDate;
 	@Column(name="PLAND_NAME",length = 255)
-	private String plandName;
+	private String planName;
 	@Column(name="PLAN_START_DT")
 	@Temporal(TemporalType.DATE)
 	private Date planStartDate;
 	@Column(name="PLAN_STATUS",length = 255)
-	private String plandStatus;
+	private String planStatus;
 	@Column(name="UPDATE_DT")
 	@Temporal(TemporalType.DATE)
 	private Date updateDate;
