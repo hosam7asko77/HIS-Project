@@ -37,7 +37,7 @@
 						<h2>Case Details</h2>
 						<p>Case Number : ${caseDetails.caseNumber}</p>
 						<p>Application Number : ${caseDetails.appRegister}</p>
-						<a href="#" class="btn medilife-btn mt-50">Done<span>+</span></a>
+						<a href="/DC/sendEdDetails?caseNumber=${caseDetails.caseNumber} " class="btn medilife-btn mt-50">Done<span>+</span></a>
 					</div>
 				</div>
 				<div class="col-12 col-lg-8">

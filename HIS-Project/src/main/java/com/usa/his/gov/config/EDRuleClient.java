@@ -23,6 +23,7 @@ import com.usa.his.gov.dc.entity.HisCaseDtlsEntity;
 import com.usa.his.gov.dc.entity.HisCasePlanEntity;
 import com.usa.his.gov.dc.repository.HisCaseDtlsRepository;
 import com.usa.his.gov.dc.repository.HisCasePlanRepoistory;
+import com.usa.his.gov.dc.repository.HisJobDtlRepository;
 import com.usa.his.gov.elg.model.ElgDetails;
 import com.usa.his.gov.elg.model.ElgDetailsRequest;
 import com.usa.his.gov.elg.model.IndvInfo;
@@ -38,6 +39,8 @@ public class EDRuleClient {
 	HisAppRegisterReepository appRegisterRepo;
 	@Autowired 
 	HisPlanRepository planRepo;
+	@Autowired
+	HisJobDtlRepository jobRepo;
 	@Autowired
 	HisCaseDtlsRepository caseRepo;
 	@Autowired
@@ -58,9 +61,12 @@ public class EDRuleClient {
 			System.out.println(response.getBody());
 			ElgDetails elgDetails = new ElgDetails();
 			BeanUtils.copyProperties(response.getBody(), elgDetails);
-			SimpleDateFormat dateFormat=new SimpleDateFormat("dd/MM/yyyy");
-			elgDetails.setPlanEndDate(dateFormat.parse(response.getBody().getPlanEndDate()));
-			elgDetails.setPlanStartDate(dateFormat.parse(response.getBody().getPlanStartDate()));
+			if (elgDetails.getPlanEndDate()!=null) {
+				SimpleDateFormat dateFormat=new SimpleDateFormat("dd/MM/yyyy");
+				elgDetails.setPlanEndDate(dateFormat.parse(response.getBody().getPlanEndDate()));
+				elgDetails.setPlanStartDate(dateFormat.parse(response.getBody().getPlanStartDate()));
+			}
+
 			elgDetails.setCaseNumber(caseNumber);
 			return elgDetails;
 			
@@ -79,7 +85,12 @@ public class EDRuleClient {
 		indvInfo.setIndvDob(registerEntity.getDob().toString());
 		indvInfo.setIndvFirstName(registerEntity.getFirstName());
 		indvInfo.setIndvLastName(registerEntity.getLastName());
-		indvInfo.setIsEmployed("N");
+		boolean exists = false;
+		if (jobRepo.findByCaseDtlsEntity(hisCaseDtlsEntity)!=null) {
+			exists = true;
+		}
+		indvInfo.setEmployed(exists);
+		System.out.println(exists);
 		indvInfo.setPlanName(hisPlanEntity.getPlanName());
 		log.info("EDRuleClientServiceImpl collectInfo() end");
 		return indvInfo;

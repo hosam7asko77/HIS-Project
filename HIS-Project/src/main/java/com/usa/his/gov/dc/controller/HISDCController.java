@@ -1,5 +1,6 @@
 package com.usa.his.gov.dc.controller;
 
+import java.text.ParseException;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -11,6 +12,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import static com.usa.his.gov.constant.HisConstant.ERROR_PAGE;
+import static com.usa.his.gov.constant.HisConstant.MESSAGE;
+import static com.usa.his.gov.constant.HisConstant.SUCCESS_MESSAGE;
 import static com.usa.his.gov.dc.constant.HisDataCollectionConstant.*;
 import com.usa.his.gov.dc.model.HisCaseDtls;
 import com.usa.his.gov.dc.model.HisCasePlan;
@@ -19,6 +25,8 @@ import com.usa.his.gov.dc.model.HisFamilyDtls;
 import com.usa.his.gov.dc.model.HisJobDtls;
 import com.usa.his.gov.dc.model.HisKidsDtls;
 import com.usa.his.gov.dc.service.HisCaseDtlservice;
+import com.usa.his.gov.elg.model.ElgDetails;
+import com.usa.his.gov.elg.service.EDRuleRestClientService;
 import com.usa.his.gov.exception.HisException;
 import com.usa.his.gov.plan.model.HisPlan;
 import com.usa.his.gov.plan.service.HisPlanService;
@@ -37,6 +45,8 @@ public class HISDCController {
 	private HisCaseDtlservice caseService;
 	@Autowired
 	private HisPlanService planService;
+	@Autowired
+	EDRuleRestClientService edService;
 	private String backToo;
 
 	@GetMapping("/showCaseForm")
@@ -268,11 +278,14 @@ public class HISDCController {
 
 	@GetMapping("/showCaseCreated")
 	public String CaseCreated(@RequestParam("caseNumber") Integer caseNumber, Model model) throws HisException {
+		boolean exist = edService.infoExist(caseNumber);
+		if (exist) {
+			return "redirect:/";
+		}else {
 		HisCaseDtls caseDetails = caseService.getCaseDetails(caseNumber);
 		HisFamilyDtls familyDtls = caseService.getFamilyByCase(caseNumber);
 		HisJobDtls jobDtls = caseService.getJobByCaseNumber(caseNumber);
 		HisCrimeDtls crimeDtls = caseService.getCrimeDtls(caseNumber);
-		
 		model.addAttribute(CASE_DETAILS, caseDetails);
 		model.addAttribute(FAMILY_DETAILS, familyDtls);
 		model.addAttribute(JOB_DETAILS, jobDtls);
@@ -283,6 +296,8 @@ public class HISDCController {
 		}
 
 		return CASE_CREATED;
+		}
+		
 	}
 
 	@GetMapping("/showEditFamily")
@@ -370,5 +385,18 @@ public class HISDCController {
 			return KIDS_FORM;
 		}
 		
+	}
+	@GetMapping("/sendEdDetails")
+	public String getIndvInfo(@RequestParam("caseNumber") Integer caseNumber,RedirectAttributes attributes) throws HisException, ParseException {
+		log.info("HisRestController getInv Start");
+		ElgDetails details = edService.saveEDInfo(caseNumber);
+		if (details != null) {
+			attributes.addFlashAttribute(MESSAGE, SUCCESS_MESSAGE);
+			return "redirect:/";
+		}
+		
+		return ERROR_PAGE;
+		
+
 	}
 }

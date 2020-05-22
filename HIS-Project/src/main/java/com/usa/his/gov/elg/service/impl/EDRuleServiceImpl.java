@@ -2,6 +2,7 @@ package com.usa.his.gov.elg.service.impl;
 
 
 import java.text.ParseException;
+import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ public class EDRuleServiceImpl implements EDRuleRestClientService {
 		ElgDetails sendEDRequest = ruleClient.sendEDRequest(caseNumber);
 		BeanUtils.copyProperties(sendEDRequest, elgDetailsEntity);
 		ElgDetailsEntity returnValue = elgRepo.save(elgDetailsEntity);
+		System.out.println(returnValue);
 		if (returnValue == null) {
 			throw new HisException();
 		}else {
@@ -34,6 +36,15 @@ public class EDRuleServiceImpl implements EDRuleRestClientService {
 			return sendEDRequest;
 		}
 		
+	}
+
+	@Override
+	public boolean infoExist(Integer caseNumber) throws HisException {
+		List<ElgDetailsEntity> isExist = elgRepo.findByCaseNumber(caseNumber);
+		if (isExist.size()>0) {
+			return true;
+		}
+		return false;
 	}
 
 
