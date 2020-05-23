@@ -9,8 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.usa.his.gov.config.EDRuleClient;
+import com.usa.his.gov.elg.entity.CdTriggersEntity;
 import com.usa.his.gov.elg.entity.ElgDetailsEntity;
+import com.usa.his.gov.elg.model.CdTriggersModel;
 import com.usa.his.gov.elg.model.ElgDetails;
+import com.usa.his.gov.elg.repository.CdTriggersRepository;
 import com.usa.his.gov.elg.repository.ElgDetailsRepository;
 import com.usa.his.gov.elg.service.EDRuleRestClientService;
 import com.usa.his.gov.exception.HisException;
@@ -21,6 +24,8 @@ public class EDRuleServiceImpl implements EDRuleRestClientService {
 	EDRuleClient ruleClient;
 	@Autowired
 	ElgDetailsRepository elgRepo;
+	@Autowired
+	CdTriggersRepository cdRepo;
 	
 	@Override
 	public ElgDetails saveEDInfo(Integer caseNumber) throws HisException, ParseException {
@@ -29,11 +34,12 @@ public class EDRuleServiceImpl implements EDRuleRestClientService {
 		BeanUtils.copyProperties(sendEDRequest, elgDetailsEntity);
 		ElgDetailsEntity returnValue = elgRepo.save(elgDetailsEntity);
 		System.out.println(returnValue);
-		if (returnValue == null) {
-			throw new HisException();
-		}else {
+		if (returnValue != null && saveCdTrigger(caseNumber)) {
 			BeanUtils.copyProperties(returnValue, sendEDRequest);
-			return sendEDRequest;
+			return sendEDRequest;			
+		}else {
+
+			throw new HisException();
 		}
 		
 	}
@@ -45,6 +51,16 @@ public class EDRuleServiceImpl implements EDRuleRestClientService {
 			return true;
 		}
 		return false;
+	}
+	private boolean saveCdTrigger(Integer caseNumber) {
+		CdTriggersModel triggersModel = new CdTriggersModel();
+		triggersModel.setCaseNum(caseNumber);
+		triggersModel.setTrgStatus("P");
+		triggersModel.setNotice("No notiece");
+		CdTriggersEntity triggersEntity = new CdTriggersEntity();
+		BeanUtils.copyProperties(triggersModel, triggersEntity);
+		return cdRepo.save(triggersEntity)!=null;
+		
 	}
 
 

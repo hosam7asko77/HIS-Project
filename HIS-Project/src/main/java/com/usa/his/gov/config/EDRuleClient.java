@@ -21,6 +21,7 @@ import com.usa.his.gov.appregister.entity.HisAppRegisterEntity;
 import com.usa.his.gov.appregister.repository.HisAppRegisterReepository;
 import com.usa.his.gov.dc.entity.HisCaseDtlsEntity;
 import com.usa.his.gov.dc.entity.HisCasePlanEntity;
+import com.usa.his.gov.dc.entity.HisJobDtlsEntity;
 import com.usa.his.gov.dc.repository.HisCaseDtlsRepository;
 import com.usa.his.gov.dc.repository.HisCasePlanRepoistory;
 import com.usa.his.gov.dc.repository.HisJobDtlRepository;
@@ -86,7 +87,11 @@ public class EDRuleClient {
 		indvInfo.setIndvFirstName(registerEntity.getFirstName());
 		indvInfo.setIndvLastName(registerEntity.getLastName());
 		boolean exists = false;
-		if (jobRepo.findByCaseDtlsEntity(hisCaseDtlsEntity)!=null) {
+		HisJobDtlsEntity jobDtlsEntity = jobRepo.findByCaseDtlsEntity(hisCaseDtlsEntity);
+		if (jobDtlsEntity!=null) {
+			
+			indvInfo.setTotleIncome(jobDtlsEntity.getIncome());
+			
 			exists = true;
 		}
 		indvInfo.setEmployed(exists);

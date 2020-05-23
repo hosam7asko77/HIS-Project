@@ -8,6 +8,7 @@ public class IndvInfo {
 	private String indvLastName;
 	private String indvDob;
 	private String planName;
+	private Double totleIncome;
 	private boolean Employed;
 
 }
