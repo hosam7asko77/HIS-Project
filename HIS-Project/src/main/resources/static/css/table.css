@@ -2,8 +2,9 @@
 max-width: 600px;
 margin: 0 auto;
 }
-#dHV th, td {
+#example th, td {
 white-space: nowrap;
+background: transparent;
 }
 table.dataTable thead .sorting:after,
 table.dataTable thead .sorting:before,
@@ -17,3 +18,4 @@ table.dataTable thead .sorting_desc_disabled:after,
 table.dataTable thead .sorting_desc_disabled:before {
 bottom: .5em;
 }
+

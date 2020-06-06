@@ -58,6 +58,5 @@ public class HisCrimeDtlsEntity {
 	@UpdateTimestamp
 	@Column(name = "UPDATE_DATE", insertable = false, updatable = true)
 	private Date updateDate;
-	@OneToOne(cascade = CascadeType.ALL)
-	private HisCaseDtlsEntity caseDtlsEntity;
+
 }

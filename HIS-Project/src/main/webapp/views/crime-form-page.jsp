@@ -23,15 +23,7 @@
 <!-- Style CSS -->
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/style.css">
-<style type="text/css">
-.error {
-	border:;
-	color: red;
-	min-height: 20px;
-	background-color: #808080;
-	border-radius: 10px;
-}
-</style>
+
 
 </head>
 
@@ -69,7 +61,7 @@
 						<form:hidden path="crimeId" />
 						<br>
 						<form:hidden path="caseNumber" value="${caseNumber}" />
-						<div class="input-group">
+						<div class="form-group">
 							<br> <label style="font-size: 15px" for="incidentType">Incident
 								Type</label> <br> Collision
 							<form:checkbox path="incidentType" value="Collision"
@@ -85,18 +77,12 @@
 								cssStyle="cursor: pointer;" />
 							<span id="errorMsg"></span>
 						</div>
-						<div class="input-group">
-							<div class="input-group-icon">
-								<i class="zmdi zmdi-calendar-note input-icon js-btn-calendar"
-									style="color: white;"></i>
+						<div class="form-group">
 								<form:input path="incidentDate" id="incidentDate"
 									cssStyle="cursor: pointer;"
-									cssClass="input--style-4 js-datepicker form-control border-top-0 border-right-0 border-left-0"
+									cssClass="form-control border-top-0 border-right-0 border-left-0"
 									placeholder="Date when  you witnessed the incident" />
-								<!-- 									<div class="error-msg"></div>
- -->
 							</div>
-						</div>
 						<div class="input-group">
 							<label style="font-size: 15px">Location of the incident</label>
 							<div class="input-group">
@@ -125,7 +111,7 @@
 								cssClass="form-control form-control border-top-0 border-right-0 border-left-0"
 								id="peopelInvolved" placeholder="How many people were involved" />
 						</div>
-						<div class="input-group">
+						<div class="form-group">
 							<span>Choose Report File</span>
 							<div class="custom-file mb-3">
 								<form:input path="crimeReport" type="file"
@@ -140,7 +126,7 @@
 						</div>
 						<c:if test="${processHandel=='processCrimeForm'}">
 							<div class="float-sm-left">
-								<a href="/DC/showJobForm?caseNumber=${caseNumber}${backTo}"
+								<a href="/DC/${backTo}?caseNumber=${caseNumber}"
 									class="btn btn-danger"><span class="fa fa-long-arrow-left"></span>&nbsp;Back</a>
 							</div>
 						</c:if>
@@ -157,7 +143,7 @@
 	<!-- ***** Footer Area End ***** -->
 
 	<script
-		src="${pageContext.request.contextPath}/js/jquery/jquery-3.5.0.js"></script>
+		src="${pageContext.request.contextPath}/js/jquery/jquery-3.5.1.js"></script>
 	<script
 		src="${pageContext.request.contextPath}/js/jquery/jquery.validate.min.js"></script>
 
@@ -167,16 +153,13 @@
 	<script src="${pageContext.request.contextPath}/js/popper.min.js"></script>
 	<!-- Bootstrap js -->
 	<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/js/datepicker/moment.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/js/datepicker/daterangepicker.js"></script>
+	<script src="${pageContext.request.contextPath}/js/datepicker/js/gijgo.min.js" type="text/javascript"></script>
+
 	<script src="${pageContext.request.contextPath}/js/select2.min.js"></script>
 	<!-- Plugins js -->
 	<script src="${pageContext.request.contextPath}/js/plugins.js"></script>
 	<!-- Active js -->
 	<script src="${pageContext.request.contextPath}/js/active.js"></script>
-	<script src="${pageContext.request.contextPath}/js/global.js"></script>
 	<script src="${pageContext.request.contextPath}/js/extra/crime.js"></script>
 </body>
 </html>

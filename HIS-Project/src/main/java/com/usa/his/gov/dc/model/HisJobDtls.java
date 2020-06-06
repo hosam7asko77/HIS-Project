@@ -16,7 +16,7 @@ public class HisJobDtls {
 	private String orgName;
 	private String jobType;
 	private String jobPosition;
-	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	@DateTimeFormat(pattern = "MM/dd/yyyy")
 	@JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd")
 	private Date startJob;
 	private Double income;

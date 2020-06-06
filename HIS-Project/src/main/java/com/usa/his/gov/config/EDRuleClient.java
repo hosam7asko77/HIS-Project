@@ -29,8 +29,8 @@ import com.usa.his.gov.elg.model.ElgDetails;
 import com.usa.his.gov.elg.model.ElgDetailsRequest;
 import com.usa.his.gov.elg.model.IndvInfo;
 import com.usa.his.gov.exception.HisException;
-import com.usa.his.gov.plan.entity.HisPlanEntity;
-import com.usa.his.gov.plan.repository.HisPlanRepository;
+import com.usa.his.gov.user.entity.HisPlanEntity;
+import com.usa.his.gov.user.repository.HisPlanRepository;
 @Component
 public class EDRuleClient {
 	Logger log=LoggerFactory.getLogger(EDRuleClient.class);
@@ -80,14 +80,14 @@ public class EDRuleClient {
 		IndvInfo indvInfo = new IndvInfo();
 		log.info("EDRuleClientServiceImpl start collectInfo()");
 		HisCaseDtlsEntity hisCaseDtlsEntity = caseRepo.findById(caseNumber).get();
-		HisAppRegisterEntity registerEntity = hisCaseDtlsEntity.getAppRegister();
-		HisCasePlanEntity casePlanEntity = casePlanRepo.findByCaseDtlsEntity(hisCaseDtlsEntity);
-		HisPlanEntity hisPlanEntity = planRepo.findById(casePlanEntity.getPlanEntity().getPlanId()).get();
+		HisAppRegisterEntity registerEntity = appRegisterRepo.findByCaseDtlsEntity(hisCaseDtlsEntity);
+//		HisCasePlanEntity casePlanEntity = casePlanRepo.findByCaseDtlsEntity(hisCaseDtlsEntity);
+//		HisPlanEntity hisPlanEntity = planRepo.findById(casePlanEntity.getPlanEntity().getPlanId()).get();
 		indvInfo.setIndvDob(registerEntity.getDob().toString());
 		indvInfo.setIndvFirstName(registerEntity.getFirstName());
 		indvInfo.setIndvLastName(registerEntity.getLastName());
 		boolean exists = false;
-		HisJobDtlsEntity jobDtlsEntity = jobRepo.findByCaseDtlsEntity(hisCaseDtlsEntity);
+		HisJobDtlsEntity jobDtlsEntity = jobRepo.findById(hisCaseDtlsEntity.getJobDetailsEntity().getJobId()).get();
 		if (jobDtlsEntity!=null) {
 			
 			indvInfo.setTotleIncome(jobDtlsEntity.getIncome());
@@ -96,7 +96,7 @@ public class EDRuleClient {
 		}
 		indvInfo.setEmployed(exists);
 		System.out.println(exists);
-		indvInfo.setPlanName(hisPlanEntity.getPlanName());
+		indvInfo.setPlanName(hisCaseDtlsEntity.getCasePlanEntity().getPlanName());
 		log.info("EDRuleClientServiceImpl collectInfo() end");
 		return indvInfo;
 		

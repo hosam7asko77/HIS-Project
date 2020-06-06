@@ -28,6 +28,7 @@
 </head>
 
 <body>
+<c:set var="publicId" value="${sessionScope['PUBLIC_ID_SESSION']}"></c:set>
 	<!-- Start Header Area-->
 	<%@ include file="header.jsp"%>
 	<!-- ***** Header Area End ***** -->
@@ -94,7 +95,7 @@
 					</h4>
 					<form:form action="/DC/processCaseForm"
 						modelAttribute="caseDetails">
-						<form:hidden path="userId" />
+						<form:hidden path="userId" value="${publicId}"/>
 						<form:hidden path="appRegister" id="appRegisterID" />
 						<div class="float-sm-right">
 							<button class="btn btn-success" type="submit" id="createBtn">
@@ -116,24 +117,17 @@
 
 	<!-- jQuery (Necessary for All JavaScript Plugins) -->
 	<script
-		src="${pageContext.request.contextPath}/js/jquery/jquery-2.2.4.min.js"></script>
-	<!-- Popper js -->
+		src="${pageContext.request.contextPath}/js/jquery/jquery-3.5.1.js"></script>
 	<script src="${pageContext.request.contextPath}/js/popper.min.js"></script>
 	<!-- Bootstrap js -->
 	<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/js/datepicker/moment.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/js/datepicker/daterangepicker.js"></script>
 	<!-- Plugins js -->
 	<script src="${pageContext.request.contextPath}/js/plugins.js"></script>
 	<!-- Active js -->
 	<script src="${pageContext.request.contextPath}/js/active.js"></script>
 	<!-- Google Maps -->
-	<script
-		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAwuyLRa1uKNtbgx6xAJVmWy-zADgegA2s"></script>
+	
 	<script src="${pageContext.request.contextPath}/js/map-active.js"></script>
-	<script src="${pageContext.request.contextPath}/js/global.js"></script>
 	<script src="${pageContext.request.contextPath}/js/extra/createCase.js"></script>
 
 </body>

@@ -3,6 +3,9 @@ package com.usa.his.gov.dc.controller;
 import java.text.ParseException;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +20,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import static com.usa.his.gov.constant.HisConstant.ERROR_PAGE;
 import static com.usa.his.gov.constant.HisConstant.MESSAGE;
 import static com.usa.his.gov.constant.HisConstant.SUCCESS_MESSAGE;
-import static com.usa.his.gov.dc.constant.HisDataCollectionConstant.*;
+import static com.usa.his.gov.constant.HisDataCollectionConstant.*;
+
 import com.usa.his.gov.dc.model.HisCaseDtls;
 import com.usa.his.gov.dc.model.HisCasePlan;
 import com.usa.his.gov.dc.model.HisCrimeDtls;
@@ -28,8 +32,8 @@ import com.usa.his.gov.dc.service.HisCaseDtlservice;
 import com.usa.his.gov.elg.model.ElgDetails;
 import com.usa.his.gov.elg.service.EDRuleRestClientService;
 import com.usa.his.gov.exception.HisException;
-import com.usa.his.gov.plan.model.HisPlan;
-import com.usa.his.gov.plan.service.HisPlanService;
+import com.usa.his.gov.user.model.HisPlan;
+import com.usa.his.gov.user.service.HisPlanService;
 
 @Controller
 @RequestMapping("/DC")
@@ -58,16 +62,16 @@ public class HISDCController {
 	}
 
 	@PostMapping("/processCaseForm")
-	public String processCaseForm(HisCaseDtls caseDtls, Model model)
+	public String processCaseForm(HisCaseDtls caseDtls, Model model,HttpSession session)
 			throws HisException {
 		log.info("HISDCController caseForm() method starting");
-		caseDtls.setUserId(503);
 		HisCaseDtls returnValue = caseService.newCase(caseDtls);
 		if (returnValue == null) {
 			log.info("HISDCController caseForm() method end with exception");
 			throw new HisException();
 		}
 		log.info("HISDCController caseForm() method end success");
+		session.setAttribute(CASE_PROCESS, "running");
 		model.addAttribute(CASE_DETAILS, returnValue);
 		return REDIRECT_TO_SELECT_PLAN+"?caseNumber="+returnValue.getCaseNumber();
 	}
@@ -75,8 +79,8 @@ public class HISDCController {
 	@GetMapping("/showSelectPlan")
 	public String selectPlan(@RequestParam("caseNumber") Integer caseNumber,Model model) throws HisException {
 		log.info("HISDCController selectPlan() method starting");
-		HisCasePlan casePlan = caseService.getPlanByCaseNumber(caseNumber);
-		if (casePlan==null) {
+		HisCaseDtls caseDetails = caseService.getCaseDetails(caseNumber);
+		if (caseDetails.getCasePlan()==null) {
 			List<HisPlan> plans = planService.getAllPlans();
 			model.addAttribute(CASE_NUMBER,caseNumber);
 			model.addAttribute(CASE_PALN_DETAILS, new HisCasePlan());
@@ -99,6 +103,7 @@ public class HISDCController {
 		} else {
 			log.info("HISDCController selectPlanProcess() method end with exception");
 			throw new HisException();
+			
 		}
 
 	}
@@ -125,14 +130,18 @@ public class HISDCController {
 		log.info("HISDCController processFamilyForm() method starting");
 		backToo=BACK_TO_FAMILY;
 		HisFamilyDtls returnValue = caseService.addFamilyDtls(familyDtls);
-		log.info("ghdgh" + returnValue.toString());
-		System.out.println(returnValue.toString());
-		HisCaseDtls caseDetails = caseService.getCaseDetails(returnValue.getCaseNumber());
-		if (returnValue.getHaveChild()) {
+		HisCasePlan plan = caseService.getCasePlanByCaseNumber(returnValue.getCaseNumber());
+		 if (plan.getPlanName().equalsIgnoreCase("SNAP")) {
+			 log.info("HISDCController processFamilyForm() method end go to crime");
+				return REDIRECT_TO_CRIME+returnValue.getCaseNumber()+backToo;
+			}
+		else if (returnValue.getHaveChild()) {
 			log.info("HISDCController processFamilyForm() method end go to kids");
 			return REDIRECT_TO_KIDS_DETAILS+returnValue.getCaseNumber();
-		} else {
-			return REDIRECT_TO_JOB_DETAILS+ caseDetails.getCaseNumber()+backToo;
+		}
+		 else {
+			 log.info("HISDCController processFamilyForm() method end go to job");
+			return REDIRECT_TO_JOB_DETAILS+ returnValue.getCaseNumber()+backToo;
 
 		}
 	}
@@ -162,6 +171,7 @@ public class HISDCController {
 			HisCaseDtls caseDetails = caseService.getCaseDetails(returnValue.getCaseNumber());
 			model.addAttribute(CASE_DETAILS, caseDetails);
 			model.addAttribute(KIDS_DETAILS_LIST, allKids);
+			model.addAttribute(MESSAGE, "kid added sucessfuly");
 			return REDIRECT_TO_KIDS_DETAILS+returnValue.getCaseNumber();
 		} else {
 			return KIDS_FORM;
@@ -236,11 +246,12 @@ public class HISDCController {
 
 	@PostMapping("/processJobForm")
 	public String processJobForm(HisJobDtls jobDtls, Model attributes) throws HisException {
+		backToo=BACK_TO_JOB;
 		HisJobDtls returnValue = caseService.addJobDetails(jobDtls);
 		if (returnValue != null) {
 			HisCaseDtls caseDetails = caseService.getCaseDetails(returnValue.getCaseNumber());
 			attributes.addAttribute(CASE_DETAILS, caseDetails);
-			return REDIRECT_TO_CRIME+caseDetails.getCaseNumber();
+			return REDIRECT_TO_CRIME+caseDetails.getCaseNumber()+backToo;
 		} else {
 			attributes.addAttribute(MESSAGE, "you can adding this info");
 			return JOB_FORM;
@@ -248,11 +259,12 @@ public class HISDCController {
 	}
 
 	@GetMapping("/showCrimeForm")
-	public String showCrimeForm(@RequestParam("caseNumber") Integer caserNumber, Model model) throws HisException {
+	public String showCrimeForm(@RequestParam("caseNumber") Integer caserNumber,@RequestParam("backTo")String backTo, Model model) throws HisException {
 		HisCrimeDtls crimeDtls = caseService.getCrimeDtls(caserNumber);
 		model.addAttribute(CASE_NUMBER, caserNumber);
 		model.addAttribute(PROCESS_HANDELER, "processCrimeForm");
-		model.addAttribute(BACK_TO,backToo);
+		System.out.println(backTo);
+		model.addAttribute(BACK_TO,backTo);
 		if (crimeDtls==null) {
 		model.addAttribute(CRIME_DETAILS, new HisCrimeDtls());
 		return CRIME_FORM;
@@ -283,6 +295,7 @@ public class HISDCController {
 			return "redirect:/";
 		}else {
 		HisCaseDtls caseDetails = caseService.getCaseDetails(caseNumber);
+		System.out.println(caseDetails);
 		HisFamilyDtls familyDtls = caseService.getFamilyByCase(caseNumber);
 		HisJobDtls jobDtls = caseService.getJobByCaseNumber(caseNumber);
 		HisCrimeDtls crimeDtls = caseService.getCrimeDtls(caseNumber);
@@ -303,9 +316,10 @@ public class HISDCController {
 	@GetMapping("/showEditFamily")
 	public String showEditFamly(@RequestParam("caseNumber") Integer caseNumber,Model model) throws HisException {
 		log.info("HISDCController showEditFamly() method starting");
-		HisFamilyDtls familyDtls = caseService.getFamilyByCase(caseNumber);
+//		HisFamilyDtls familyDtls = caseService.getFamilyByCase(caseNumber);
+		HisCaseDtls caseDetails = caseService.getCaseDetails(caseNumber);
 		model.addAttribute(PROCESS_HANDELER, "processEditFamily");
-		model.addAttribute(FAMILY_DETAILS,familyDtls);
+		model.addAttribute(FAMILY_DETAILS,caseDetails.getFamilyDtls());
 		log.info("HISDCController showEditFamly() method end");
 		return FAMILY_FORM;
 	}
@@ -387,16 +401,54 @@ public class HISDCController {
 		
 	}
 	@GetMapping("/sendEdDetails")
-	public String getIndvInfo(@RequestParam("caseNumber") Integer caseNumber,RedirectAttributes attributes) throws HisException, ParseException {
+	public String getIndvInfo(@RequestParam("caseNumber") Integer caseNumber,RedirectAttributes attributes,HttpSession session) throws HisException, ParseException {
 		log.info("HisRestController getInv Start");
 		ElgDetails details = edService.saveEDInfo(caseNumber);
 		if (details != null) {
+			session.setAttribute(CASE_PROCESS, "done");
 			attributes.addFlashAttribute(MESSAGE, SUCCESS_MESSAGE);
 			return "redirect:/";
 		}
 		
-		return ERROR_PAGE;
-		
+		return ERROR_PAGE;		
+	}
+	@GetMapping("/viewAllCases")
+	public String showCases(Model model) {
+		List<HisCaseDtls> allCases = caseService.getAllCases();
+		model.addAttribute(ALL_CASES,allCases);
+		return ALL_CASES_PAGE;
+	}
+	@GetMapping("/deleteCase")
+	public String deleteCase(@RequestParam("caseNumber")Integer caseNumber,Model model) throws HisException {
+		boolean isDelete = caseService.deleteCase(caseNumber);
+		if (isDelete) {
+			List<HisCaseDtls> allCases = caseService.getAllCases();
+			model.addAttribute(ALL_CASES,allCases);
+			model.addAttribute(MESSAGE, "caseDeleted");
+			return ALL_CASES_PAGE;
+		}
+		List<HisCaseDtls> allCases = caseService.getAllCases();
+		model.addAttribute(ALL_CASES,allCases);
+		model.addAttribute(MESSAGE, "can delete this case");
+		return ALL_CASES_PAGE;
+	}
+	@GetMapping("/moreDetails")
+	public String viewMoreDetails(@RequestParam("caseNumber")Integer caseNumber,Model model) throws HisException {
+		HisCaseDtls caseDetails = caseService.getCaseDetails(caseNumber);
+		System.out.println(caseDetails);
+		HisFamilyDtls familyDtls = caseService.getFamilyByCase(caseNumber);
+		HisJobDtls jobDtls = caseService.getJobByCaseNumber(caseNumber);
+		HisCrimeDtls crimeDtls = caseService.getCrimeDtls(caseNumber);
+		model.addAttribute(CASE_DETAILS, caseDetails);
+		model.addAttribute(FAMILY_DETAILS, familyDtls);
+		model.addAttribute(JOB_DETAILS, jobDtls);
+		model.addAttribute(CRIME_DETAILS, crimeDtls);
+		if (familyDtls.getHaveChild()) {
+			List<HisKidsDtls> allKids = caseService.getAllKids(caseNumber);
+			model.addAttribute(KIDS_DETAILS_LIST, allKids);
+		}
 
+		return MORE_PAGE;
+		
 	}
 }

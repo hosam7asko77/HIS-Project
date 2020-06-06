@@ -21,6 +21,7 @@ public class HisConstant {
 	public static final String LOGIN_PAGE = "redirect:/login";
 	public static final String MESSAGE = "msg";
 	public static final String SUCCESS_MESSAGE = "case have been created successfuly";
+	public static final String PUBLIC_ID_SESSION = "PUBLIC_ID_SESSION";
 
 	
 }

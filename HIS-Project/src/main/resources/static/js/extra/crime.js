@@ -40,23 +40,39 @@ $(document).ready(function(){
 		    	inDescribe: "Please enter description",
 		    	incidentType : "you must check at least 1 incident type",
 		    },
-//		    errorPlacement: function(error,element) {
-//				if (element.attr("name")=='incidentType') {
-//					$("#errorMsg").text(error);
-//				} else {
-//					error.insertAfter(element);
-//				}
-//			},
-//		    errorElement: 'div',
-//		    errorLabelContainer: '.error-msg',
+
 
 		    submitHandler: function(form) {
 		      form.submit();
 		    }
 		  });
 		});
-//	$(".custom-file-input").on("change",function(){
-//		var fileName = $(this).val().split(\\).pop();
-//		$(this).siblings(."custom-file-input").addClass("selected").html(fileName);
-//	});
+	$(function () {
+	    $('#incidentDate').datepicker({
+	        format: "mm/dd/yyyy",
+	    });
+	});
+	(function ($) {
+	'use strict';
+	/*[ Select 2 Config ]
+	    ===========================================================*/
+
+	try {
+	    var selectSimple = $('.js-select-simple');
+
+	    selectSimple.each(function () {
+	        var that = $(this);
+	        var selectBox = that.find('select');
+	        var selectDropdown = that.find('.select-dropdown');
+	        selectBox.select2({
+	            dropdownParent: selectDropdown
+	        });
+	    });
+
+	} catch (err) {
+	    console.log(err);
+	}
+
+
+	})(jQuery);
 });

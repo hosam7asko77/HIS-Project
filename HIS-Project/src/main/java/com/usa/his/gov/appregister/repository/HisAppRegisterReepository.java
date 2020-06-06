@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.usa.his.gov.appregister.entity.HisAppRegisterEntity;
+import com.usa.his.gov.dc.entity.HisCaseDtlsEntity;
 @Repository
 public interface HisAppRegisterReepository extends JpaRepository<HisAppRegisterEntity, String> {
 
@@ -15,5 +16,7 @@ public interface HisAppRegisterReepository extends JpaRepository<HisAppRegisterE
 	@Modifying
 	@Query("update HisAppRegisterEntity his set his.deleteStatus=:deleteStatus where his.appId=:appId")
 	Integer updateStatus(boolean deleteStatus, String appId);
+	HisAppRegisterEntity findByCaseDtlsEntity(HisCaseDtlsEntity caseDtlsEntity);
+	
 
 }

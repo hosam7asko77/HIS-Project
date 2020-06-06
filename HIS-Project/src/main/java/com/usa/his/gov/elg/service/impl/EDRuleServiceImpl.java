@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import com.usa.his.gov.config.EDRuleClient;
@@ -17,6 +18,7 @@ import com.usa.his.gov.elg.repository.CdTriggersRepository;
 import com.usa.his.gov.elg.repository.ElgDetailsRepository;
 import com.usa.his.gov.elg.service.EDRuleRestClientService;
 import com.usa.his.gov.exception.HisException;
+import com.usa.his.gov.share.HisConverter;
 @Service
 public class EDRuleServiceImpl implements EDRuleRestClientService {
 
@@ -26,6 +28,8 @@ public class EDRuleServiceImpl implements EDRuleRestClientService {
 	ElgDetailsRepository elgRepo;
 	@Autowired
 	CdTriggersRepository cdRepo;
+	@Autowired 
+	HisConverter convert;
 	
 	@Override
 	public ElgDetails saveEDInfo(Integer caseNumber) throws HisException, ParseException {
@@ -61,6 +65,29 @@ public class EDRuleServiceImpl implements EDRuleRestClientService {
 		BeanUtils.copyProperties(triggersModel, triggersEntity);
 		return cdRepo.save(triggersEntity)!=null;
 		
+	}
+
+	@Override
+	public List<ElgDetails> getAllElg() throws HisException {
+		List<ElgDetailsEntity> all = elgRepo.findAll();
+		List<ElgDetails> elgDetails = convert.convertElgDtlsEntityToElgDetails(all);
+		return elgDetails;
+	}
+
+	@Override
+	public Long getCountStatus(String status) {
+		long returnValue = elgRepo.countByPlanStatus(status);
+		return returnValue;
+	}
+
+	@Override
+	public boolean deleteElg(Integer edTraceId) {
+		elgRepo.deleteById(edTraceId);
+		ElgDetailsEntity detailsEntity = elgRepo.findById(edTraceId).get();
+		if (detailsEntity==null) {
+			return true;
+		}
+		return false;
 	}
 
 

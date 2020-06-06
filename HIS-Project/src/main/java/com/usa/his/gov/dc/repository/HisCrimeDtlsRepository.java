@@ -7,6 +7,4 @@ import com.usa.his.gov.dc.entity.HisCrimeDtlsEntity;
 
 public interface HisCrimeDtlsRepository extends JpaRepository<HisCrimeDtlsEntity, Integer> {
 	
-	public HisCrimeDtlsEntity findByCaseDtlsEntity(HisCaseDtlsEntity caseDtlsEntity);
-
 }

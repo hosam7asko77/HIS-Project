@@ -1,7 +1,7 @@
 package com.usa.his.gov.service;
 
 import com.usa.his.gov.exception.HisException;
-import com.usa.his.gov.model.response.SSNClientResponse;
+import com.usa.his.gov.model.SSNClientResponse;
 
 public interface SSNRestClientService {
 	/**

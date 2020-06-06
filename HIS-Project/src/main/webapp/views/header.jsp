@@ -2,12 +2,18 @@
 	pageEncoding="UTF-8" isELIgnored="false"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
 <sec:authentication property="principal.authorities" var="authorities" />
 <c:forEach items="${authorities}" var="authority" varStatus="vs">
 	<c:set var="auth" value="${authority.authority}"></c:set>
 </c:forEach>
+<c:set var="publicId" value="${sessionScope['PUBLIC_ID_SESSION']}"></c:set>
+<c:if test="${publicId ==null}">
+	<c:redirect url="/"></c:redirect>
+</c:if>
+
 <!-- Preloader -->
 <div id="preloader">
 	<div class="medilife-load"></div>
@@ -22,7 +28,8 @@
 					<div
 						class="h-100 d-md-flex justify-content-between align-items-center">
 						<p>
-							Welcome to <span>Medifile</span> template
+
+							Welcome to <span>HIS</span> 
 						</p>
 						<p>
 							Opening Hours : Monday to Saturday - 8am to 10pm Contact : <span>+12-823-611-8721</span>
@@ -66,9 +73,8 @@
 											<a class="dropdown-item" href="/AppRegister/showRegisterForm">New
 												Application</a> <a class="dropdown-item"
 												href="/AppRegister/showSearchPage">Search</a> <a
-												class="dropdown-item" href="/AppRegister/showUpdateForm">Edit
-												Application</a> <a class="dropdown-item"
-												href="/AppRegister/getAllApp">All Applications</a>
+												class="dropdown-item" href="/AppRegister/getAllApp">All
+												Applications</a>
 										</div></li>
 									<li class="nav-item dropdown"><a
 										class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
@@ -78,25 +84,11 @@
 											<a class="dropdown-item" href="/DC/showCaseForm">Create
 												Case</a> <a class="dropdown-item"
 												href="/AppRegister/showSearchPage">Search For Case </a> <a
-												class="dropdown-item" href="/AppRegister/getAllApp">View
-												Case</a>
-											<li class="nav-item"><a class="nav-link"
-												href="services.html">Services</a></li>
-											<li class="nav-item"><a class="nav-link"
-												href="blog.html">News</a></li>
+												class="dropdown-item" href="/DC/viewAllCases">View
+												Case</a></div></li>
 											<c:if test="${auth=='ROLE_Admin'}">
-												<li class="nav-item dropdown"><a
-													class="nav-link dropdown-toggle" href="#"
-													id="navbarDropdown" role="button" data-toggle="dropdown"
-													aria-haspopup="true" aria-expanded="false">Admin</a>
-													<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-														<a class="dropdown-item" href="/Admin/Manager/showForm">Create
-															Account</a> <a class="dropdown-item"
-															href="/Admin/Manager/viewUsers">View Accounts</a> <a
-															class="dropdown-item" href="/Admin/Plan/showPlanForm">Create
-															Plan</a> <a class="dropdown-item"
-															href="/Admin/Plan/viewPlans">View Plan</a>
-													</div></li>
+												<li class="nav-item"><a class="nav-link"
+												href="/Admin/">Admin</a></li>
 											</c:if>
 											<li class="nav-item"><form:form
 													action="${pageContext.request.contextPath}/logout"

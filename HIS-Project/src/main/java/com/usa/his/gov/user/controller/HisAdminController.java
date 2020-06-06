@@ -8,16 +8,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.usa.his.gov.appregister.model.HisAppRegister;
+import com.usa.his.gov.appregister.service.HisAppRegisterService;
 import com.usa.his.gov.constant.AdminControllerConstant;
 import com.usa.his.gov.constant.HisConstant;
+import com.usa.his.gov.dc.model.HisCaseDtls;
+import com.usa.his.gov.dc.service.HisCaseDtlservice;
+import com.usa.his.gov.elg.model.ElgDetails;
+import com.usa.his.gov.elg.service.EDRuleRestClientService;
 import com.usa.his.gov.exception.HisException;
-import com.usa.his.gov.model.request.UpdatePasswordRequest;
+import com.usa.his.gov.model.UpdatePasswordRequest;
+import com.usa.his.gov.user.model.HisPlan;
 import com.usa.his.gov.user.model.HisUserDtls;
+import com.usa.his.gov.user.service.HisPlanService;
 import com.usa.his.gov.user.service.HisUserDtlsService;
 
 @Controller
@@ -33,104 +41,14 @@ public class HisAdminController {
 	 */
 	@Autowired
 	private HisUserDtlsService userDtlsService;
-
-	/**
-	 * this method using to show registeration page
-	 * 
-	 * @param model
-	 * @return
-	 */
-	@GetMapping("/Manager/showForm")
-	public String singUp(Model model) {
-		log.info("HisAdminController singUp() method execution start");
-		model.addAttribute(AdminControllerConstant.DETAILS, new HisUserDtls());
-		model.addAttribute(AdminControllerConstant.PROCESS_FORM, "processForm");
-		log.info("HisAdminController singUp() method execution end");
-		return AdminControllerConstant.REGISTER_FORM_PAGE;
-
-	}
-
-	/**
-	 * this method using to process registration form
-	 * 
-	 * @param userDtls
-	 * @param attributes
-	 * @return
-	 * @throws HisException
-	 */
-	@PostMapping("/Manager/processForm")
-	public String processRegisterForm(@ModelAttribute("details") HisUserDtls userDtls, RedirectAttributes attributes)
-			throws HisException {
-		log.info("HisAdminController processRegisterForm() method execution starts");
-		HisUserDtls returnValue = new HisUserDtls();
-		returnValue = userDtlsService.newHisUser(userDtls);
-		if (returnValue != null) {
-			attributes.addFlashAttribute("Msg", "Success");
-			log.info("HisAdminController processRegisterForm() method execution end success");
-			return AdminControllerConstant.REDIRECT_VIEW_PAGE;
-		}
-		log.info("HisAdminController processRegisterForm() method execution end with exception");
-		return AdminControllerConstant.REGISTER_FORM_PAGE;
-	}
-
-	/**
-	 * this method using to view all users and allow admin to managing them
-	 * 
-	 * @param model
-	 * @return
-	 * @throws HisException
-	 */
-	@GetMapping("/Manager/viewUsers")
-	public String viewUsers(Model model) throws HisException {
-		log.info("HisAdminController viewUsers() method execution starts");
-		List<HisUserDtls> allUsers = userDtlsService.getAllUsers();
-		model.addAttribute(AdminControllerConstant.DETAILS, allUsers);
-		log.info("HisAdminController viewUsers() method execution end");
-		return AdminControllerConstant.VIEW_USERS;
-	}
-
-	/**
-	 * this method using to show update form
-	 * 
-	 * @param pId
-	 * @param model
-	 * @return
-	 * @throws HisException
-	 */
-	@GetMapping("/Manager/showFormForUpdate")
-	public String showFormForUpdateUser(@RequestParam("publicId") String pId, Model model) throws HisException {
-		log.info("HisAdminController showFormForUpdateUser() method execution starts");
-		HisUserDtls userDtls = userDtlsService.getUserByPublicId(pId);
-		model.addAttribute(AdminControllerConstant.DETAILS, userDtls);
-		model.addAttribute(AdminControllerConstant.PROCESS_FORM, "ProcessUpdateForm");
-		log.info("HisAdminController showFormForUpdateUser() method execution end");
-		return AdminControllerConstant.REGISTER_FORM_PAGE;
-	}
-
-	/**
-	 * this method using to process update form
-	 * 
-	 * @param userDtls
-	 * @param attributes
-	 * @return
-	 * @throws HisException
-	 */
-	@PostMapping("/Manager/processUpdateForm")
-	public String processUpdateForm(@ModelAttribute("details") HisUserDtls userDtls, RedirectAttributes attributes)
-			throws HisException {
-		log.info("HisAdminController processUpdateForm() method execution starts");
-		HisUserDtls returnValue = new HisUserDtls();
-		returnValue = userDtlsService.updateUser(userDtls);
-		if (returnValue != null) {
-			System.out.println("Process update Call");
-			attributes.addFlashAttribute("Msg", "Update Success");
-			log.info("HisAdminController processUpdateForm() method execution end success");
-			return AdminControllerConstant.REDIRECT_VIEW_PAGE;
-		}
-		log.info("HisAdminController processUpdateForm() method execution exception");
-		return AdminControllerConstant.REGISTER_FORM_PAGE;
-	}
-
+	@Autowired 
+	HisAppRegisterService appService;
+	@Autowired
+	HisCaseDtlservice caseDtlservice;
+	@Autowired
+	HisPlanService planService;
+	@Autowired
+	EDRuleRestClientService edRulesService;
 	/**
 	 * update InActive user Status to Active
 	 * 
@@ -199,6 +117,73 @@ public class HisAdminController {
 			return AdminControllerConstant.SET_PASSWORD_PAGE;
 		}
 	}
+	@GetMapping("/")
+	public String showDashboard(Model model) throws HisException {
+		HisPlan plan = new HisPlan();
+		model.addAttribute(AdminControllerConstant.PLAN_DETAILS, plan);
+		List<HisPlan> allPlans = planService.getAllPlans();
+		model.addAttribute(AdminControllerConstant.PLANS, allPlans);
+		List<HisUserDtls> allUsers = userDtlsService.getAllUsers();
+		model.addAttribute(AdminControllerConstant.DETAILS, allUsers);
+		int appSize = appService.getAllApplications().size();
+		model.addAttribute(AdminControllerConstant.APP_NO,appSize);
+		int caseSize = caseDtlservice.getAllCases().size();
+		model.addAttribute(AdminControllerConstant.CASE_NO, caseSize);
+		model.addAttribute("elgDnNo", edRulesService.getCountStatus("DN"));
+		model.addAttribute("elgApNo", edRulesService.getCountStatus("AP"));
+		return AdminControllerConstant.DASHBORD_PAGE;
+	}
+	@GetMapping("/userProfile")
+	public String showUserProfile(Model model) {
+		log.info("HisAdminController singUp() method execution start");
+		model.addAttribute(AdminControllerConstant.DETAILS, new HisUserDtls());
+		model.addAttribute(AdminControllerConstant.PROCESS_FORM, "processForm");
+		log.info("HisAdminController singUp() method execution end");
+		return AdminControllerConstant.USER_PROFIL;
+	}
+	@GetMapping("/tables")
+	public String showTables(Model model) throws HisException {
+		List<HisAppRegister> applications = appService.getAllApplications();
+		List<HisCaseDtls> cases = caseDtlservice.getAllCases();
+		List<HisPlan> plans = planService.getAllPlans();
+		List<ElgDetails> elg = edRulesService.getAllElg();
+		model.addAttribute(AdminControllerConstant.APPLICATIONS, applications);
+		model.addAttribute(AdminControllerConstant.CASES, cases);
+		model.addAttribute(AdminControllerConstant.PLANS, plans);
+		model.addAttribute(AdminControllerConstant.ELGS, elg);
+		return AdminControllerConstant.TABELS;
+	}
+	@PostMapping("/planFormProcess")
+	public String processPlanForm(HisPlan plan, Model model) throws HisException {
+		log.info("HisPlanController showPlanForm() method start");
+		HisPlan returnPlan = planService.newPlan(plan);
+		if (returnPlan == null) {
+			model.addAttribute(AdminControllerConstant.MSG, "Error");
+			log.info("HisPlanController showPlanForm() method end with error");
+			return AdminControllerConstant.REDIRECT_TO_DASHBOARD;
+		} else {
+			return AdminControllerConstant.REDIRECT_TO_DASHBOARD;
+		}
+	}
 
+	@PostMapping("/updatePlanFormProcess")
+	public String processUpdatePlanForm(HisPlan plan, Model model) throws HisException {
+		log.info("HisPlanController showPlanForm() method start");
+		HisPlan returnPlan = planService.newPlan(plan);
+		if (returnPlan == null) {
+			model.addAttribute(AdminControllerConstant.MSG, "Error");
+			log.info("HisPlanController showPlanForm() method end with error");
+			return AdminControllerConstant.REDIRECT_TO_DASHBOARD;
+		} else {
+			return AdminControllerConstant.REDIRECT_TO_DASHBOARD;
+		}
+	}
+	@GetMapping("/deletePlan")
+	public String deletePaln(@RequestParam("planId") String planId) throws HisException {
+		log.info("HisPlanController deletePaln() method start");
+		planService.deletePlan(planId);
+		log.info("HisPlanController deletePaln() method end");
+		return AdminControllerConstant.REDIRECT_TO_DASHBOARD;
+	}
 
 }

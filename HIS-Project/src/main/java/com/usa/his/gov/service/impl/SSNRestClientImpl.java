@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.usa.his.gov.exception.HisException;
-import com.usa.his.gov.model.response.SSNClientResponse;
+import com.usa.his.gov.model.SSNClientResponse;
 import com.usa.his.gov.service.SSNRestClientService;
 import com.usa.his.gov.user.controller.HisAdminController;
 /**

@@ -51,9 +51,9 @@ public class HisAppRegisterServiceImpl implements HisAppRegisterService {
 		log.info("HisAppRegisterServiceImpl newApplication() method starting");
 		HisAppRegisterEntity registerEntity = new HisAppRegisterEntity();
 		HisUserDtlsEntity dtlsEntity = userRepository.findByPublicId(register.getPublicUserId());
+		BeanUtils.copyProperties(register, registerEntity);
 		registerEntity.setDtlsEntity(dtlsEntity);
 		registerEntity.setDeleteStatus(false);
-		BeanUtils.copyProperties(register, registerEntity);
 		HisAppRegisterEntity savedValue = appReepository.save(registerEntity);
 		if (savedValue != null) {
 			log.info("HisAppRegisterServiceImpl newApplication() method end successfuly");

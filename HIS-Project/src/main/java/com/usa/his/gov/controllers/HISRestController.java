@@ -17,12 +17,12 @@ import com.usa.his.gov.appregister.service.HisAppRegisterService;
 import com.usa.his.gov.dc.service.HisCaseDtlservice;
 import com.usa.his.gov.elg.service.EDRuleRestClientService;
 import com.usa.his.gov.exception.HisException;
-import com.usa.his.gov.model.response.HisMessageResponcetModel;
-import com.usa.his.gov.model.response.SSNClientResponse;
-import com.usa.his.gov.plan.model.HisPlan;
-import com.usa.his.gov.plan.service.HisPlanService;
+import com.usa.his.gov.model.HisMessageResponcetModel;
+import com.usa.his.gov.model.SSNClientResponse;
 import com.usa.his.gov.service.SSNRestClientService;
+import com.usa.his.gov.user.model.HisPlan;
 import com.usa.his.gov.user.model.HisUserDtls;
+import com.usa.his.gov.user.service.HisPlanService;
 import com.usa.his.gov.user.service.HisUserDtlsService;
 
 import io.swagger.annotations.Api;
@@ -239,7 +239,32 @@ public class HISRestController {
 		}
 		return messagModel;
 	}
-
+	@ApiOperation(
+			value = "Get Plan",
+			response = HisPlan.class,
+			tags = "RestApi/getPlan",
+			consumes = "Text",
+			produces = "application/json"
+			)
+	@ApiResponses(value = {
+			@ApiResponse(code = 200,message = "Sucecss|OK"),
+			@ApiResponse(code = 401,message = "not authorized!"),
+			@ApiResponse(code = 403,message = "forbidden!!!"),
+			@ApiResponse(code = 404,message = "not found!!!"),
+			
+	})
+	@GetMapping(path = "/getPlan",produces = {"application/json","application/xml"})
+	public HisPlan getPlanByname(@RequestParam("planName") String planName) throws HisException {
+		log.info("HisAdminController getApplicationById() method starting");
+		HisPlan returnValue = planService.getPlanByName(planName);
+		if (returnValue!=null) {
+			log.info("HisAdminController getApplicationById() method end");
+			return returnValue;
+		}else {
+			log.info("HisAdminController getApplicationById() method end not found");
+			return null;
+		}
+	}
 	
 
 }

@@ -17,7 +17,7 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.usa.his.gov.plan.entity.HisPlanEntity;
+import com.usa.his.gov.user.entity.HisPlanEntity;
 
 import lombok.Data;
 
@@ -28,11 +28,8 @@ public class HisCasePlanEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer casePlanId;
-	@ManyToOne(cascade = {CascadeType.DETACH,CascadeType.REFRESH})
-	@JoinColumn(name = "PLAN_ID")
-	private HisPlanEntity planEntity;
-	@OneToOne(cascade = CascadeType.ALL)
-	private HisCaseDtlsEntity caseDtlsEntity;
+	@Column(name="PLAN_NAME" , nullable = false)
+	private String planName;
 	@Temporal(TemporalType.TIMESTAMP)
 	@CreationTimestamp
 	@Column(name = "CREATE_DATE", insertable = true, updatable = false)
@@ -41,5 +38,6 @@ public class HisCasePlanEntity {
 	@UpdateTimestamp
 	@Column(name = "UPDATE_DATE", insertable = false, updatable = true)
 	private Date updateDate;
+	
 
 }

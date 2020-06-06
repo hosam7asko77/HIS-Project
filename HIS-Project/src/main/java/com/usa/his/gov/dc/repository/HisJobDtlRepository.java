@@ -7,7 +7,6 @@ import com.usa.his.gov.dc.entity.HisCaseDtlsEntity;
 import com.usa.his.gov.dc.entity.HisJobDtlsEntity;
 @Repository
 public interface HisJobDtlRepository extends JpaRepository<HisJobDtlsEntity, Integer> {
-	public HisJobDtlsEntity findByCaseDtlsEntity(HisCaseDtlsEntity caseDtlsEntity);
 	
 
 }

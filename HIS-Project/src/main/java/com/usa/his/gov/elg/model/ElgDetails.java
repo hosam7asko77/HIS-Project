@@ -10,6 +10,7 @@ import lombok.Data;
 
 @Data
 public class ElgDetails {
+	private Integer edTraceId;
 	private Integer caseNumber;
 	private String planName;
 	private String planStatus;

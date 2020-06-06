@@ -44,7 +44,7 @@ public interface HisCaseDtlservice {
 	 */
 	public HisCasePlan addCasePlan(HisCasePlan casePlan) throws HisException;
 
-	public HisCasePlan getPlanByCaseNumber(Integer caseNumber) throws HisException;
+	public HisCasePlan getCasePlanByCaseNumber(Integer caseNumber) throws HisException;
 	/**
 	 * this method using to add family details
 	 * 
@@ -117,5 +117,8 @@ public interface HisCaseDtlservice {
 	public void deleteKids(Integer kidsId)throws HisException;
 
 	public HisKidsDtls getKidById(Integer KidId)throws HisException;
+	
+	public List<HisCaseDtls> getAllCases();
+	public boolean deleteCase(Integer CaseNumber)throws HisException;
 	
 }

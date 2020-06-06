@@ -26,6 +26,10 @@
 </head>
 
 <body>
+						<c:set var="process" value="${sessionScope['caseProcess']}"></c:set>
+						<c:if test="${process ==null}">
+							<c:redirect url="/DC/showCaseForm"></c:redirect> 
+						</c:if>
 
 	<%@ include file="header.jsp"%>
 	<!-- ***** Header Area Start ***** -->
@@ -71,13 +75,12 @@
 						</div>
 						<div class="row row-space">
 							<div class="col-co-2">
-								<div class="input-group">
-									<span>Number of Brother</span>
+								<div class="form-group rs-select2">
 									<c:set var="count" value="0" scope="page" />
-									<div class="rs-select2 js-select-simple select--no-search">
+									<div class="js-select-simple select--no-search">
 										<form:select path="numberBrather" cssClass="form-control"
 											id="noBrother">
-											<form:option value="" disabled="disabled" selected="selected">Select No</form:option>
+											<form:option value="" disabled="disabled" selected="selected">Select Number of Brother</form:option>
 											<c:forEach var="i" begin="0" end="10">
 												<form:option value="${i}">${i}</form:option>
 											</c:forEach>
@@ -88,12 +91,11 @@
 								</div>
 							</div>
 							<div class="col-co-2">
-								<div class="input-group">
-									<span>Number of Sister</span>
-									<div class="rs-select2 js-select-simple select--no-search">
+								<div class="form-group rs-select2">
+									<div class="js-select-simple select--no-search">
 										<form:select path="numberSester" id="noSister"
 											cssClass="form-control">
-											<form:option value="" disabled="disabled" selected="selected">Select No</form:option>
+											<form:option value="" disabled="disabled" selected="selected">Select Number Sister</form:option>
 											<c:forEach var="i" begin="0" end="10">
 												<form:option value="${i}">${i}</form:option>
 											</c:forEach>
@@ -105,9 +107,8 @@
 
 							</div>
 						</div>
-						<div class="input-group">
-							<span> Relationship</span>
-							<div class="rs-select2 js-select-simple select--no-search">
+						<div class="form-group rs-select2">
+							<div class="js-select-simple select--no-search">
 								<form:select path="relationship" id="relation"
 									cssClass="form-control">
 									<form:option value="">Select Relationship</form:option>
@@ -127,12 +128,11 @@
 											cssClass="form-control form-control border-top-0 border-right-0 border-left-0"
 											id="fname" placeholder="Wife/Husband Age" />
 									</div>
-									<div class="input-group">
-									<span>Kids</span>
-									<div class="rs-select2 js-select-simple select--no-search">
+									<div class="form-group rs-select2">
+									<div class="js-select-simple select--no-search">
 									<form:select path="haveChild" id="kids"
 										cssClass="form-control">
-										<form:option value="">Select *</form:option>
+										<form:option value="">Select Kids</form:option>
 										<form:option value="true">Yes</form:option>
 										<form:option value="false">No</form:option>
 									</form:select>
@@ -156,7 +156,7 @@
 
 	<!-- jQuery (Necessary for All JavaScript Plugins) -->
 	<script
-		src="${pageContext.request.contextPath}/js/jquery/jquery-3.5.0.js"></script>
+		src="${pageContext.request.contextPath}/js/jquery/jquery-3.5.1.js"></script>
 	<script
 		src="${pageContext.request.contextPath}/js/jquery/jquery.validate.min.js"></script>
 
@@ -166,10 +166,6 @@
 	<script src="${pageContext.request.contextPath}/js/popper.min.js"></script>
 	<!-- Bootstrap js -->
 	<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/js/datepicker/moment.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/js/datepicker/daterangepicker.js"></script>
 	<script src="${pageContext.request.contextPath}/js/select2.min.js"></script>
 	<!-- Plugins js -->
 	<script src="${pageContext.request.contextPath}/js/plugins.js"></script>

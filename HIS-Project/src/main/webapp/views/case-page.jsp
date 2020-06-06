@@ -27,6 +27,7 @@
 </head>
 
 <body>
+<c:set var="publicId" value="${sessionScope['PUBLIC_ID_SESSION']}"></c:set>
 	<!-- Start Header Area-->
 	<%@ include file="header.jsp"%>
 	<!-- ***** Header Area End ***** -->

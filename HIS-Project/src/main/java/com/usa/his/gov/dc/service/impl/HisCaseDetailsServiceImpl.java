@@ -1,9 +1,10 @@
 package com.usa.his.gov.dc.service.impl;
 
 
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
-
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,9 +34,10 @@ import com.usa.his.gov.dc.service.HisCaseDtlservice;
 import com.usa.his.gov.appregister.entity.HisAppRegisterEntity;
 import com.usa.his.gov.appregister.repository.HisAppRegisterReepository;
 import com.usa.his.gov.exception.HisException;
-import com.usa.his.gov.plan.repository.HisPlanRepository;
 import com.usa.his.gov.share.HisConverter;
+import com.usa.his.gov.user.entity.HisPlanEntity;
 import com.usa.his.gov.user.entity.HisUserDtlsEntity;
+import com.usa.his.gov.user.repository.HisPlanRepository;
 import com.usa.his.gov.user.repository.HisUserDtlsRepository;
 
 /**
@@ -67,8 +69,6 @@ public class HisCaseDetailsServiceImpl implements HisCaseDtlservice {
 	private HisCasePlanRepoistory casePlanRepository;
 
 	@Autowired
-	private HisPlanRepository planReposiotry;
-	@Autowired
 	private HisFamilyRepository familyRepository;
 
 	@Autowired
@@ -90,14 +90,15 @@ public class HisCaseDetailsServiceImpl implements HisCaseDtlservice {
 	@Override
 	public HisCaseDtls newCase(HisCaseDtls caseDtls) throws HisException {
 		log.info("in HisCaseDetailsServiceImpl newCase() method starting");
-		HisAppRegisterEntity appRegister = appRepository.findById(caseDtls.getAppRegister()).get();
-		HisUserDtlsEntity userDtls = userRepository.findById(caseDtls.getUserId()).get();
+		HisUserDtlsEntity userDtls = userRepository.findByPublicId(caseDtls.getUserId());
 		HisCaseDtlsEntity caseDtlsEntity = new HisCaseDtlsEntity();
 		BeanUtils.copyProperties(caseDtls, caseDtlsEntity);
-		caseDtlsEntity.setAppRegister(appRegister);
 		caseDtlsEntity.setDtlsEntity(userDtls);
 		HisCaseDtlsEntity returnValue = caseRepositor.save(caseDtlsEntity);
 		if (returnValue != null) {
+			HisAppRegisterEntity appRegister = appRepository.findById(caseDtls.getAppRegister()).get();
+			appRegister.setCaseDtlsEntity(returnValue);
+			appRepository.save(appRegister);
 			BeanUtils.copyProperties(returnValue, caseDtls);
 			log.info("in HisCaseDetailsServiceImpl newCase() method end");
 			return caseDtls;
@@ -110,11 +111,14 @@ public class HisCaseDetailsServiceImpl implements HisCaseDtlservice {
 
 	@Override
 	public HisCaseDtls getCaseDetails(Integer caseNumber) throws HisException {
+		System.out.println(caseNumber);
 		HisCaseDtlsEntity caseDtlsEntity = caseRepositor.findById(caseNumber).get();
 		if (caseDtlsEntity != null) {
 			HisCaseDtls caseDtls = new HisCaseDtls();
 			BeanUtils.copyProperties(caseDtlsEntity, caseDtls);
-			caseDtls.setAppRegister(caseDtlsEntity.getAppRegister().getAppId());
+			System.out.println("sjghfhg "+caseDtls.getFamilyDtls());
+			HisAppRegisterEntity appRegisterEntity = appRepository.findByCaseDtlsEntity(caseDtlsEntity);
+			caseDtls.setAppRegister(appRegisterEntity.getAppId());
 			return caseDtls;
 		}
 		return null;
@@ -123,12 +127,14 @@ public class HisCaseDetailsServiceImpl implements HisCaseDtlservice {
 	@Override
 	public HisCasePlan addCasePlan(HisCasePlan casePlan) throws HisException {
 		HisCasePlanEntity casePlanEntity = new HisCasePlanEntity();
-		casePlanEntity.setCaseDtlsEntity(caseRepositor.findById(casePlan.getCaseNumber()).get());
-		casePlanEntity.setPlanEntity(planReposiotry.findById(casePlan.getPlanId()).get());
+		HisCaseDtlsEntity caseDtlsEntity = caseRepositor.findById(casePlan.getCaseNumber()).get();
+		BeanUtils.copyProperties(casePlan, casePlanEntity);
 		HisCasePlanEntity saveCasePlan = casePlanRepository.save(casePlanEntity);
 		if (saveCasePlan != null) {
-			casePlan.setCaseNumber(saveCasePlan.getCaseDtlsEntity().getCaseNumber());
-			casePlan.setPlanId(saveCasePlan.getPlanEntity().getPlanId());
+			caseDtlsEntity.setCasePlanEntity(saveCasePlan);
+			caseRepositor.save(caseDtlsEntity);
+			BeanUtils.copyProperties(saveCasePlan, casePlan);
+			casePlan.setCaseNumber(caseDtlsEntity.getCaseNumber());
 			return casePlan;
 		} else {
 			throw new HisException();
@@ -142,10 +148,13 @@ public class HisCaseDetailsServiceImpl implements HisCaseDtlservice {
 		}
 		HisFamilyDtlsEntity familyDtlsEntity = new HisFamilyDtlsEntity();
 		BeanUtils.copyProperties(familyDtls, familyDtlsEntity);
-		familyDtlsEntity.setCaseDtlsEntity(caseRepositor.findById(familyDtls.getCaseNumber()).get());
 		HisFamilyDtlsEntity saveFamily = familyRepository.save(familyDtlsEntity);
 		if (saveFamily != null) {
+			HisCaseDtlsEntity caseDtlsEntity = caseRepositor.findById(familyDtls.getCaseNumber()).get();
+			caseDtlsEntity.setFamilyDtlsEntity(saveFamily);
+			caseRepositor.save(caseDtlsEntity);
 			BeanUtils.copyProperties(saveFamily, familyDtls);
+			familyDtls.setCaseNumber(caseDtlsEntity.getCaseNumber());
 			return familyDtls;
 		} else {
 			throw new HisException();
@@ -178,13 +187,15 @@ public class HisCaseDetailsServiceImpl implements HisCaseDtlservice {
 
 	@Override
 	public HisJobDtls addJobDetails(HisJobDtls jobDtls) throws HisException {
-		System.out.println(jobDtls.getCaseNumber());
 		HisJobDtlsEntity jobDtlsEntity = new HisJobDtlsEntity();
 		BeanUtils.copyProperties(jobDtls, jobDtlsEntity);
-		jobDtlsEntity.setCaseDtlsEntity(caseRepositor.findById(jobDtls.getCaseNumber()).get());
 		HisJobDtlsEntity savedValue = jobRepository.save(jobDtlsEntity);
 		if (savedValue != null) {
+			HisCaseDtlsEntity caseDtlsEntity = caseRepositor.findById(jobDtls.getCaseNumber()).get();
+			caseDtlsEntity.setJobDetailsEntity(savedValue);
+			caseRepositor.save(caseDtlsEntity);
 			BeanUtils.copyProperties(savedValue, jobDtls);
+			jobDtls.setCaseNumber(caseDtlsEntity.getCaseNumber());
 			return jobDtls;
 		}else {
 			throw new HisException();
@@ -195,17 +206,19 @@ public class HisCaseDetailsServiceImpl implements HisCaseDtlservice {
 	@Override
 	public HisCrimeDtls addCrimeDetails(HisCrimeDtls crimeDtls) throws HisException {
 		log.info("in HisCaseDetailsServiceImpl HisCrimeDtls() method starting");
+		HisCaseDtlsEntity caseDtlsEntity = caseRepositor.findById(crimeDtls.getCaseNumber()).get();
 		HisCrimeDtlsEntity crimeDtlsEntity = new HisCrimeDtlsEntity();
 		BeanUtils.copyProperties(crimeDtls, crimeDtlsEntity);
 		String incidentType = getIncidentType(crimeDtls.getIncidentType());
 		crimeDtlsEntity.setIncidentType(incidentType);
-		crimeDtlsEntity.setCaseDtlsEntity(caseRepositor.findById(crimeDtls.getCaseNumber()).get());
 		crimeDtlsEntity.setCrimeReport(converter.converMultiPartTByte(crimeDtls.getCrimeReport()));
 		HisCrimeDtlsEntity savedValue = crimeRepository.save(crimeDtlsEntity);
 		if (savedValue != null) {
 			log.info("in HisCaseDetailsServiceImpl HisCrimeDtls() method copy");
+			caseDtlsEntity.setCrimeDtlsEntity(savedValue);
+			caseRepositor.save(caseDtlsEntity);
 			BeanUtils.copyProperties(savedValue, crimeDtls);
-			crimeDtls.setCaseNumber(savedValue.getCaseDtlsEntity().getCaseNumber());
+			crimeDtls.setCaseNumber(caseDtlsEntity.getCaseNumber());
 			return crimeDtls;
 		}else {
 			log.info("in HisCaseDetailsServiceImpl HisCrimeDtls() the not save starting");
@@ -216,8 +229,7 @@ public class HisCaseDetailsServiceImpl implements HisCaseDtlservice {
 	@Override
 	public boolean appExist(String appId) throws HisException {
 		HisAppRegisterEntity appRegisterEntity = appRepository.findById(appId).get();
-		HisCaseDtlsEntity findByAppRegister = caseRepositor.findByAppRegister(appRegisterEntity);
-		if (findByAppRegister == null) {
+		if (appRegisterEntity.getCaseDtlsEntity() == null) {
 			return false;
 		}else
 		{
@@ -237,11 +249,14 @@ public class HisCaseDetailsServiceImpl implements HisCaseDtlservice {
 	@Override
 	public HisFamilyDtls getFamilyByCase(Integer caseNumber) throws HisException {
 		HisCaseDtlsEntity hisCaseDtlsEntity = caseRepositor.findById(caseNumber).get();
-		HisFamilyDtlsEntity familyDtlsEntity = familyRepository.findByCaseDtlsEntity(hisCaseDtlsEntity);
+		if (hisCaseDtlsEntity.getFamilyDtlsEntity()==null) {
+			return null;
+		}
+		HisFamilyDtlsEntity familyDtlsEntity = familyRepository.findById(hisCaseDtlsEntity.getFamilyDtlsEntity().getCaseFamilyId()).get();
 		if (familyDtlsEntity != null) {
 			HisFamilyDtls hisFamilyDtls = new HisFamilyDtls();
 			BeanUtils.copyProperties(familyDtlsEntity, hisFamilyDtls);
-			hisFamilyDtls.setCaseNumber(familyDtlsEntity.getCaseDtlsEntity().getCaseNumber());
+			hisFamilyDtls.setCaseNumber(hisCaseDtlsEntity.getCaseNumber());
 			return hisFamilyDtls;
 		}else {
 			return null;
@@ -252,11 +267,14 @@ public class HisCaseDetailsServiceImpl implements HisCaseDtlservice {
 	@Override
 	public HisJobDtls getJobByCaseNumber(Integer caseNumber) throws HisException {
 		HisCaseDtlsEntity caseDtlsEntity = caseRepositor.findById(caseNumber).get();
-		HisJobDtlsEntity jobDtlsEntity=jobRepository.findByCaseDtlsEntity(caseDtlsEntity);
+		if (caseDtlsEntity.getJobDetailsEntity()==null) {
+			return null;
+		}
+		HisJobDtlsEntity jobDtlsEntity=jobRepository.findById(caseDtlsEntity.getJobDetailsEntity().getJobId()).get();
 		if (jobDtlsEntity != null) {
 			HisJobDtls hisJobDtls = new HisJobDtls();
 			BeanUtils.copyProperties(jobDtlsEntity, hisJobDtls);
-			hisJobDtls.setCaseNumber(jobDtlsEntity.getCaseDtlsEntity().getCaseNumber());
+			hisJobDtls.setCaseNumber(caseDtlsEntity.getCaseNumber());
 			return hisJobDtls;
 		}else {
 			return null;
@@ -266,7 +284,11 @@ public class HisCaseDetailsServiceImpl implements HisCaseDtlservice {
 
 	@Override
 	public HisCrimeDtls getCrimeDtls(Integer caseNumber) throws HisException {
-		HisCrimeDtlsEntity crimeDtlsEntity = crimeRepository.findByCaseDtlsEntity(caseRepositor.findById(caseNumber).get());
+		HisCaseDtlsEntity caseDtlsEntity = caseRepositor.findById(caseNumber).get();
+		if (caseDtlsEntity.getCrimeDtlsEntity()==null) {
+			return null;
+		}
+		HisCrimeDtlsEntity crimeDtlsEntity = crimeRepository.findById(caseDtlsEntity.getCrimeDtlsEntity().getCrimeId()).get();
 		if (crimeDtlsEntity != null) {
 			HisCrimeDtls hisCrimeDtls = new HisCrimeDtls();
 			BeanUtils.copyProperties(crimeDtlsEntity, hisCrimeDtls);
@@ -274,6 +296,7 @@ public class HisCaseDetailsServiceImpl implements HisCaseDtlservice {
 					getEncoder()
 					.encodeToString(crimeDtlsEntity.getCrimeReport()));
 			hisCrimeDtls.setIncidentType(crimeDtlsEntity.getIncidentType().split(" "));
+			hisCrimeDtls.setCaseNumber(caseNumber);
 			return hisCrimeDtls;
 		}else {
 			return null;
@@ -302,16 +325,40 @@ public class HisCaseDetailsServiceImpl implements HisCaseDtlservice {
 	}
 
 	@Override
-	public HisCasePlan getPlanByCaseNumber(Integer caseNumber) throws HisException {
+	public HisCasePlan getCasePlanByCaseNumber(Integer caseNumber) throws HisException {
 		HisCaseDtlsEntity caseDtlsEntity = caseRepositor.findById(caseNumber).get();
-		HisCasePlanEntity planEntity = casePlanRepository.findByCaseDtlsEntity(caseDtlsEntity);
-		if (planEntity != null) {
+		HisCasePlanEntity casePlanEntity = casePlanRepository.findById(caseDtlsEntity.getCasePlanEntity().getCasePlanId()).get();
+		if (casePlanEntity != null) {
 			HisCasePlan hisCasePlan = new HisCasePlan();
-			BeanUtils.copyProperties(planEntity, hisCasePlan);
-			hisCasePlan.setCaseNumber(planEntity.getCaseDtlsEntity().getCaseNumber());
+			BeanUtils.copyProperties(casePlanEntity, hisCasePlan);
+			hisCasePlan.setCaseNumber(caseDtlsEntity.getCaseNumber());
+			hisCasePlan.setPlanName(casePlanEntity.getPlanName());
 			return hisCasePlan;
 		}
 		return null;
+	}
+
+	@Override
+	public List<HisCaseDtls> getAllCases() {
+		List<HisCaseDtlsEntity> all = caseRepositor.findAll();
+		return converter.converCaseDtlsToCaseEntity(all);
+	}
+
+	@Override
+	public boolean deleteCase(Integer CaseNumber) throws HisException {
+		HisCaseDtlsEntity entity = caseRepositor.findById(CaseNumber).get();
+		HisAppRegisterEntity appRegisterEntity = appRepository.findByCaseDtlsEntity(entity);
+		appRegisterEntity.setCaseDtlsEntity(null);
+		appRepository.save(appRegisterEntity);
+		caseRepositor.deleteById(CaseNumber);
+		Optional<HisCaseDtlsEntity> caseDtlsEntity = caseRepositor.findById(CaseNumber);
+		if (caseDtlsEntity.isPresent()==false) {
+			return true;
+		}else
+		{
+			return false;
+		}
+		
 	}
 
 

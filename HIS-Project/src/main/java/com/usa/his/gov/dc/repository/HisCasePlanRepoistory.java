@@ -6,7 +6,6 @@ import com.usa.his.gov.dc.entity.HisCaseDtlsEntity;
 import com.usa.his.gov.dc.entity.HisCasePlanEntity;
 
 public interface HisCasePlanRepoistory extends JpaRepository<HisCasePlanEntity, Integer> {
-	HisCasePlanEntity findByCaseDtlsEntity(HisCaseDtlsEntity caseDtlsEntity);
 	
 
 }

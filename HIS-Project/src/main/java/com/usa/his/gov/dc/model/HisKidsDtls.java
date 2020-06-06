@@ -13,7 +13,7 @@ public class HisKidsDtls {
 
 	private Integer childId;
 	private String childName;
-	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	@DateTimeFormat(pattern = "MM/dd/yyyy")
 	@JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd")
 	private Date dob;
 	private String gender;

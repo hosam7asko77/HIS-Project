@@ -77,5 +77,13 @@ public interface HisUserDtlsRepository extends JpaRepository<HisUserDtlsEntity, 
 	 * @return
 	 */
 	public List<HisUserDtlsEntity> findByStatus(Boolean status);
+	/**
+	 * this method using to get public id
+	 * @param email
+	 * @return
+	 */
+	@Transactional
+	@Query("select his.publicId from HisUserDtlsEntity his where his.email=:email")
+	public String findPublicId(String email);
 
 }

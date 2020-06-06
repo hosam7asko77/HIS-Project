@@ -13,7 +13,7 @@ import lombok.Data;
 public class HisCrimeDtls {
 	private Integer crimeId;
 	private String[] incidentType;
-	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	@DateTimeFormat(pattern = "MM/dd/yyyy")
 	@JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd")
 	private Date incidentDate;
 	private String incidentStreet;

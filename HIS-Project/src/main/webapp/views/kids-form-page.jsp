@@ -40,7 +40,7 @@
 					<div class="breadcumb-content">
 						<h3 class="breadcumb-title">Kids Details</h3>
 						<p>Add new Kids to Case</p>
-						<p>${Msg}</p>
+						<p>${msg}</p>
 					</div>
 				</div>
 			</div>
@@ -66,15 +66,12 @@
 									cssClass="form-control form-control border-top-0 border-right-0 border-left-0"
 									id="childName" placeholder="Child Name" />
 							</div>
-							<div class="input-group">
-								<div class="input-group-icon">
-									<i class="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
-									<form:input path="dob"
-										cssClass="input--style-4 js-datepicker form-control border-top-0 border-right-0 border-left-0"
-										placeholder="Date of barth" />
-								</div>
+							<div class="form-group">
+								<form:input path="dob" id="datepicker"
+									cssClass="js-datepicker border-top-0 border-right-0 border-left-0"
+									placeholder="Date of barth" />
 							</div>
-							<div class="input-group">
+							<div class="form-group">
 								<h5 style="margin-bottom: 20px; margin-left: -5px;">Gender</h5>
 								<div class="row row-space">
 									<div class="col-co-2">
@@ -94,7 +91,7 @@
 							</div>
 							<div class="input-group">
 								<form:input path="ssn"
-									cssClass="form-control form-control border-top-0 border-right-0 border-left-0"
+									cssClass="form-control border-top-0 border-right-0 border-left-0"
 									id="ssn" placeholder="Child SSN Number" maxlength="12" />
 								<span id="ssnMsg" style="color: red;"></span>
 							</div>
@@ -105,12 +102,10 @@
 							</div>
 						</form:form>
 					</div>
-					<div class="panel panel-default" style="margin-top: 16%">
+					<div class="panel panel-default" style="margin-top: 6%">
 						<div class="panel-heading">All Kids Details</div>
 						<div class="panel-body">
-							<table id="dHV"
-								class="display table table-striped table-bordered table-hover"
-								cellspacing="0" width="100%">
+							<table id="example" class="display" style="width: 100%">
 								<thead>
 									<tr>
 										<th>SNo.</th>
@@ -127,12 +122,12 @@
 										<c:set var="count" value="${count + 1}" scope="page" />
 										<!-- init the update link-->
 										<c:choose>
-										<c:when test="${processHandel =='processKidsForm'}">processEditKids
+											<c:when test="${processHandel =='processKidsForm'}">
 										<c:set var="formChoise" value="processKidsForm" scope="page" />
-										</c:when>
-										<c:when test="${processHandel =='processEditKids'}">
-										<c:set var="formChoise" value="processEditKids" scope="page" />
-										</c:when>
+											</c:when>
+											<c:when test="${processHandel =='processEditKids'}">
+												<c:set var="formChoise" value="processEditKids" scope="page" />
+											</c:when>
 										</c:choose>
 										<c:url var="updateLink" value="/DC/updateKids">
 											<c:param name="childId" value="${tempKids.childId}"></c:param>
@@ -191,9 +186,6 @@
 		</div>
 	</section>
 
-	<br>
-	<br>
-
 	<!-- ***** Footer Area Start ***** -->
 	<%@include file="footer.jsp"%>
 	<!-- ***** Footer Area End ***** -->
@@ -201,27 +193,30 @@
 	<!-- jQuery (Necessary for All JavaScript Plugins) -->
 	<!-- jQuery (Necessary for All JavaScript Plugins) -->
 	<script
-		src="${pageContext.request.contextPath}/js/jquery/jquery-3.5.0.js"></script>
+		src="${pageContext.request.contextPath}/js/jquery/jquery-3.5.1.js"></script>
 	<script
 		src="${pageContext.request.contextPath}/js/jquery/jquery.validate.min.js"></script>
 
 	<script
 		src="${pageContext.request.contextPath}/js/jquery/additional-methods.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/js/datepicker/js/gijgo.min.js"
+		type="text/javascript"></script>
+	<script
+		src="${pageContext.request.contextPath}/js/jquery/jquery.dataTables.min.js"></script>
+
 	<!-- Popper js -->
 	<script src="${pageContext.request.contextPath}/js/popper.min.js"></script>
 	<!-- Bootstrap js -->
 	<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/js/datepicker/moment.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/js/datepicker/daterangepicker.js"></script>
+
 	<script src="${pageContext.request.contextPath}/js/select2.min.js"></script>
 	<!-- Plugins js -->
 	<script src="${pageContext.request.contextPath}/js/plugins.js"></script>
 	<!-- Active js -->
 	<script src="${pageContext.request.contextPath}/js/active.js"></script>
-	<script src="${pageContext.request.contextPath}/js/global.js"></script>
 	<script src="${pageContext.request.contextPath}/js/extra/kids.js"></script>
+	<script src="${pageContext.request.contextPath}/js/table.js"></script>
 
 </body>
 </html>

@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class HisCasePlan {
 
-	private String planId;
+	private Integer casePlanId;
 	private Integer caseNumber;
+	private String planName;
 }

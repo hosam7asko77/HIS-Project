@@ -97,5 +97,10 @@ public interface HisUserDtlsService extends UserDetailsService{
 	 * @throws HisException
 	 */
 	public boolean reActiveUser(String pId)throws HisException;
+	/**
+	 * 
+	 * @return
+	 */
+	public String getPublicId()throws HisException;
 
 }

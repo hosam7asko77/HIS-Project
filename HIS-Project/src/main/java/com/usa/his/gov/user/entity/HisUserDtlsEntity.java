@@ -18,8 +18,8 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.usa.his.gov.appregister.entity.HisAppRegisterEntity;
 import com.usa.his.gov.dc.entity.HisCaseDtlsEntity;
-import com.usa.his.gov.plan.entity.HisPlanEntity;
 
 import lombok.Data;
 /**
@@ -79,5 +79,6 @@ public class HisUserDtlsEntity {
 			CascadeType.PERSIST,
 			CascadeType.REFRESH})
 	private List <HisCaseDtlsEntity> caseDtlsEntities;
+
 	
 }

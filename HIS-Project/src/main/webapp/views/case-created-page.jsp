@@ -37,7 +37,8 @@
 						<h2>Case Details</h2>
 						<p>Case Number : ${caseDetails.caseNumber}</p>
 						<p>Application Number : ${caseDetails.appRegister}</p>
-						<a href="/DC/sendEdDetails?caseNumber=${caseDetails.caseNumber} " class="btn medilife-btn mt-50">Done<span>+</span></a>
+						<a href="/DC/sendEdDetails?caseNumber=${caseDetails.caseNumber} "
+							class="btn medilife-btn mt-50">Done<span>+</span></a>
 					</div>
 				</div>
 				<div class="col-12 col-lg-8">
@@ -94,11 +95,9 @@
 										<h5>Kids Details</h5>
 										<div class="panel panel-default" style="margin-top: 1%;">
 											<div class="panel-heading">All Kids Details</div>
-											<div class="panel-body">
-												<table id="dHV"
-													class="display table table-striped table-bordered table-hover"
-													cellspacing="0" width="100%">
-													<thead>
+											<div class="table-responsive">
+												<table id="example" class="display" style="width: %100;" >
+													<thead class=" text-primary">
 														<tr>
 															<th>SNo.</th>
 															<th>Child Name</th>
@@ -133,56 +132,58 @@
 							</div>
 						</c:if>
 						<!-- Single Service Area -->
-						<div class="col-12 col-sm-6">
-							<div class="single-service-area d-flex">
-								<div class="service-icon">
-									<i class="fa fa-briefcase"></i>
-								</div>
-								<div class="service-content">
-									<h5>Job Details</h5>
-									<p class="dtl-p">
-										Occupation : <span class="dtl-span">${jobDetails.occupation}</span>
-									</p>
-									<p class="dtl-p">
-										Organization : <span class="dtl-span">${jobDetails.orgName}</span>
-									</p>
-									<p class="dtl-p">
-										Job Type : <span class="dtl-span">${jobDetails.jobType}</span>
-									</p>
-									<p class="dtl-p">
-										Job Position : <span class="dtl-span">${jobDetails.jobPosition}</span>
-									</p>
-									<p class="dtl-p">
-										Started Date : <span class="dtl-span">${jobDetails.startJob}</span>
-									</p>
-									<p class="dtl-p">
-										Income <span class="dtl-span">$${jobDetails.income}</span>
-									</p>
-									<p class="dtl-p">
-										Income Tax From Salary : <span class="dtl-span">$${jobDetails.incomeTFS}</span>
-									</p>
-									<p class="dtl-p">
-										Income Type : <span class="dtl-span">${jobDetails.incomeType}</span>
-									</p>
-									<c:if test="${jobDetails.incomeFOR !=null}">
+						<c:if test="${jobDetails!=null}">
+							<div class="col-12 col-sm-6">
+								<div class="single-service-area d-flex">
+									<div class="service-icon">
+										<i class="fa fa-briefcase"></i>
+									</div>
+									<div class="service-content">
+										<h5>Job Details</h5>
 										<p class="dtl-p">
-											Income From Other Resource : <span class="dtl-span">${jobDetails.incomeFOR}</span>
+											Occupation : <span class="dtl-span">${jobDetails.occupation}</span>
 										</p>
 										<p class="dtl-p">
-											Income From Other Resource Type : <span class="dtl-span">${jobDetails.incomeFORType}</span>
+											Organization : <span class="dtl-span">${jobDetails.orgName}</span>
 										</p>
 										<p class="dtl-p">
-											Tax From Other Resource : <span class="dtl-span">${jobDetails.incomeTFOR}</span>
+											Job Type : <span class="dtl-span">${jobDetails.jobType}</span>
 										</p>
-									</c:if>
-									<div class="float-sm-laft">
-										<a
-											href="/DC/showEditjobForm?caseNumber=${caseDetails.caseNumber}"
-											class="btn btn-primary">Edit <i class="fa fa-edit"></i></a>
+										<p class="dtl-p">
+											Job Position : <span class="dtl-span">${jobDetails.jobPosition}</span>
+										</p>
+										<p class="dtl-p">
+											Started Date : <span class="dtl-span">${jobDetails.startJob}</span>
+										</p>
+										<p class="dtl-p">
+											Income <span class="dtl-span">$${jobDetails.income}</span>
+										</p>
+										<p class="dtl-p">
+											Income Tax From Salary : <span class="dtl-span">$${jobDetails.incomeTFS}</span>
+										</p>
+										<p class="dtl-p">
+											Income Type : <span class="dtl-span">${jobDetails.incomeType}</span>
+										</p>
+										<c:if test="${jobDetails.incomeFOR !=null}">
+											<p class="dtl-p">
+												Income From Other Resource : <span class="dtl-span">${jobDetails.incomeFOR}</span>
+											</p>
+											<p class="dtl-p">
+												Income From Other Resource Type : <span class="dtl-span">${jobDetails.incomeFORType}</span>
+											</p>
+											<p class="dtl-p">
+												Tax From Other Resource : <span class="dtl-span">${jobDetails.incomeTFOR}</span>
+											</p>
+										</c:if>
+										<div class="float-sm-laft">
+											<a
+												href="/DC/showEditjobForm?caseNumber=${caseDetails.caseNumber}"
+												class="btn btn-primary">Edit <i class="fa fa-edit"></i></a>
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
+						</c:if>
 						<!-- Single Service Area -->
 						<div class="col-12 col-sm-6">
 							<div class="single-service-area d-flex">
@@ -241,26 +242,20 @@
 
 	<!-- jQuery (Necessary for All JavaScript Plugins) -->
 	<script
-		src="${pageContext.request.contextPath}/js/jquery/jquery-3.5.0.js"></script>
+		src="${pageContext.request.contextPath}/js/jquery/jquery-3.5.1.js"></script>
 	<script
-		src="${pageContext.request.contextPath}/js/jquery/jquery.validate.min.js"></script>
-
-	<script
-		src="${pageContext.request.contextPath}/js/jquery/additional-methods.min.js"></script>
+		src="${pageContext.request.contextPath}/js/jquery/jquery.dataTables.min.js"></script>
 	<!-- Popper js -->
 	<script src="${pageContext.request.contextPath}/js/popper.min.js"></script>
 	<!-- Bootstrap js -->
 	<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/js/datepicker/moment.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/js/datepicker/daterangepicker.js"></script>
-	<script src="${pageContext.request.contextPath}/js/select2.min.js"></script>
+
 	<!-- Plugins js -->
 	<script src="${pageContext.request.contextPath}/js/plugins.js"></script>
 	<!-- Active js -->
 	<script src="${pageContext.request.contextPath}/js/active.js"></script>
-	<script src="${pageContext.request.contextPath}/js/extra/family.js"></script>
+	<script src="${pageContext.request.contextPath}/js/table.js"></script>
+
 
 </body>
 </html>

@@ -15,7 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.usa.his.gov.appregister.model.HisAppRegister;
 import com.usa.his.gov.appregister.service.HisAppRegisterService;
-import com.usa.his.gov.constant.AppRegisterConstant;
+import static com.usa.his.gov.constant.AppRegisterConstant.*;
 import com.usa.his.gov.exception.HisException;
 import com.usa.his.gov.user.controller.HisAdminController;
 
@@ -44,28 +44,26 @@ public class HISAppRegisterController {
 	public String showRegisterForm(Model model) {
 		log.info("In HISAppRegisterController showRegisterForm()method starting");
 		HisAppRegister hisAppRegister = new HisAppRegister();
-		model.addAttribute(AppRegisterConstant.PROCESS_FORM, "processRegisterForm");
-		model.addAttribute(AppRegisterConstant.APP_REGISTER, hisAppRegister);
+		model.addAttribute(PROCESS_FORM, "processRegisterForm");
+		model.addAttribute(APP_REGISTER, hisAppRegister);
 		log.info("In HISAppRegisterController showRegisterForm()method ending");
-		return AppRegisterConstant.APP_REGISTER_FORM;
+		return APP_REGISTER_FORM;
 	}
 
 	@PostMapping("/processRegisterForm")
 	public String processRegister(HisAppRegister register, RedirectAttributes attributes, Model model)
 			throws HisException {
 		log.info("In HISAppRegisterController processRegister()method starting");
-		String publicId = "IS833GFlvw";
-		register.setPublicUserId(publicId);
 		boolean isSave = registerService.newApplication(register);
 		if (isSave) {
 			log.info("In HISAppRegisterController processRegister()method end data saved");
-			attributes.addFlashAttribute(AppRegisterConstant.MESSAGE, "Application Created");
-			return AppRegisterConstant.VIEW_ALL_APPLICATIONS;
+			attributes.addFlashAttribute(MESSAGE, "Application Created");
+			return REDIRECT_TO_VIEW_ALL;
 		} else {
-			model.addAttribute(AppRegisterConstant.MESSAGE, "Error im Application Creation");
-			model.addAttribute(AppRegisterConstant.APP_REGISTER, register);
+			model.addAttribute(MESSAGE, "Error im Application Creation");
+			model.addAttribute(APP_REGISTER, register);
 			log.info("In HISAppRegisterController processRegister()method end data not saved");
-			return AppRegisterConstant.APP_REGISTER_FORM;
+			return APP_REGISTER_FORM;
 		}
 
 	}
@@ -75,32 +73,32 @@ public class HISAppRegisterController {
 		log.info("In HISAppRegisterController getApplicationById()method starting");
 		HisAppRegister returnValue = registerService.getApplicationById(appId);
 		if (returnValue == null) {
-			model.addAttribute(AppRegisterConstant.MESSAGE, "Appliction Dose Not Exist");
+			model.addAttribute(MESSAGE, "Appliction Dose Not Exist");
 			log.info("In HISAppRegisterController getApplicationById()method no appliction found ");
-			return AppRegisterConstant.SEARCH_PAGE;
+			return SEARCH_PAGE;
 		}
-		model.addAttribute(AppRegisterConstant.APP_REGISTER, returnValue);
+		model.addAttribute(APP_REGISTER, returnValue);
 		log.info("In HISAppRegisterController getApplicationById()method end");
-		return AppRegisterConstant.SEARCH_PAGE;
+		return SEARCH_PAGE;
 	}
 
 	@GetMapping("getAllApp")
 	public String getAllApplications(Model model) throws HisException {
 		log.info("In HISAppRegisterController getAllApplications()method starting");
 		List<HisAppRegister> applications = registerService.getAllApplications();
-		model.addAttribute(AppRegisterConstant.APP_REGISTER, applications);
+		model.addAttribute(APP_REGISTER, applications);
 		log.info("In HISAppRegisterController getAllApplications()method end");
-		return AppRegisterConstant.VIEW_ALL_APPLICATIONS;
+		return VIEW_ALL_APPLICATIONS;
 	}
 
 	@GetMapping("/showUpdateForm")
 	public String showUpdateForm(@RequestParam("appId") String appId, Model model) throws HisException {
 		log.info("In HISAppRegisterController showUpdateForm()method starting");
 		HisAppRegister hisAppRegister = registerService.getApplicationById(appId);
-		model.addAttribute(AppRegisterConstant.PROCESS_FORM, "processUpdateForm");
-		model.addAttribute(AppRegisterConstant.APP_REGISTER, hisAppRegister);
+		model.addAttribute(PROCESS_FORM, "processUpdateForm");
+		model.addAttribute(APP_REGISTER, hisAppRegister);
 		log.info("In HISAppRegisterController showUpdateForm()method ending");
-		return AppRegisterConstant.APP_REGISTER_FORM;
+		return APP_REGISTER_FORM;
 	}
 
 	@PostMapping("/processUpdateForm")
@@ -110,13 +108,13 @@ public class HISAppRegisterController {
 		boolean isSave = registerService.updateApplication(register);
 		if (isSave) {
 			log.info("In HISAppRegisterController processUpdate()method end data saved");
-			attributes.addFlashAttribute(AppRegisterConstant.MESSAGE, "Application Updated");
-			return AppRegisterConstant.REDIRECT_TO_VIEW_ALL;
+			attributes.addFlashAttribute(MESSAGE, "Application Updated");
+			return REDIRECT_TO_VIEW_ALL;
 		} else {
-			model.addAttribute(AppRegisterConstant.MESSAGE, "Error im Application Creation");
-			model.addAttribute(AppRegisterConstant.APP_REGISTER, register);
+			model.addAttribute(MESSAGE, "Error im Application Creation");
+			model.addAttribute(APP_REGISTER, register);
 			log.info("In HISAppRegisterController processUpdate()method end data not saved");
-			return AppRegisterConstant.APP_REGISTER_FORM;
+			return APP_REGISTER_FORM;
 		}
 
 	}
@@ -124,34 +122,34 @@ public class HISAppRegisterController {
 	@GetMapping("/deleteApp")
 	public String deleteApp(@RequestParam("appId") String appId, RedirectAttributes attributes) {
 		log.info("In HISAppRegisterController undoDelete()method starting");
-		boolean isDelete = registerService.updateDeleteStatus(AppRegisterConstant.DELETE, appId);
+		boolean isDelete = registerService.updateDeleteStatus(DELETE, appId);
 		if (isDelete) {
 			log.info("In HISAppRegisterController deleteApp()method starting");
-			attributes.addFlashAttribute(AppRegisterConstant.MESSAGE, "Appliction Number his been deleted successfule");
+			attributes.addFlashAttribute(MESSAGE, "Appliction Number his been deleted successfule");
 			log.info("In HISAppRegisterController deleteApp()method end not delete");
-			return AppRegisterConstant.REDIRECT_TO_VIEW_ALL;
+			return REDIRECT_TO_VIEW_ALL;
 		} else {
 
 		}
-		attributes.addFlashAttribute(AppRegisterConstant.MESSAGE, "Appliction Number is Not  deleted");
+		attributes.addFlashAttribute(MESSAGE, "Appliction Number is Not  deleted");
 		log.info("In HISAppRegisterController deleteApp()method end");
-		return AppRegisterConstant.REDIRECT_TO_VIEW_ALL;
+		return REDIRECT_TO_VIEW_ALL;
 	}
 
 	@GetMapping("/undoDeleteApp")
 	public String undoDelete(@RequestParam("appId") String appId, RedirectAttributes attributes) {
 		log.info("In HISAppRegisterController undoDelete()method starting");
-		boolean isUndoDelete = registerService.updateDeleteStatus(AppRegisterConstant.UNDO_DELETE, appId);
+		boolean isUndoDelete = registerService.updateDeleteStatus(UNDO_DELETE, appId);
 		if (isUndoDelete) {
-			attributes.addFlashAttribute(AppRegisterConstant.MESSAGE, "Appliction his been undo deleted successfule");
+			attributes.addFlashAttribute(MESSAGE, "Appliction his been undo deleted successfule");
 			log.info("In HISAppRegisterController undoDelete()method end ");
-			return AppRegisterConstant.REDIRECT_TO_VIEW_ALL;
+			return REDIRECT_TO_VIEW_ALL;
 		} else {
 
 		}
-		attributes.addFlashAttribute(AppRegisterConstant.MESSAGE, "Appliction is Not undo deleted");
+		attributes.addFlashAttribute(MESSAGE, "Appliction is Not undo deleted");
 		log.info("In HISAppRegisterController undoDelete()method end appliction not undo delete");
-		return AppRegisterConstant.REDIRECT_TO_VIEW_ALL;
+		return REDIRECT_TO_VIEW_ALL;
 
 	}
 	@GetMapping("/showSearchPage")

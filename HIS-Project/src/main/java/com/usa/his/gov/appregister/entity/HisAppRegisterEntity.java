@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -19,6 +20,7 @@ import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.usa.his.gov.config.PlanIdSequenceGenerator;
+import com.usa.his.gov.dc.entity.HisCaseDtlsEntity;
 import com.usa.his.gov.user.entity.HisUserDtlsEntity;
 
 import lombok.Data;
@@ -64,8 +66,12 @@ public class HisAppRegisterEntity {
 	@UpdateTimestamp
 	@Column(name = "UPDATE_DATE", insertable = false, updatable = true)
 	private Date updatedDate;
-	@ManyToOne(cascade = {CascadeType.DETACH,CascadeType.REFRESH})
+	@ManyToOne(cascade = {CascadeType.ALL})
 	@JoinColumn(name = "User_Id")
 	private HisUserDtlsEntity dtlsEntity;
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "case_detals")
+	private HisCaseDtlsEntity caseDtlsEntity;
+	
 	
 }

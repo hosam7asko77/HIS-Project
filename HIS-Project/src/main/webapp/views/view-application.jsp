@@ -30,8 +30,8 @@
 
 	<!-- ***** Header Area Start ***** -->
 	<%@ include file="header.jsp"%>
-		<!-- ***** Header Area End ***** -->
-	
+	<!-- ***** Header Area End ***** -->
+
 	<!-- ***** Breadcumb Area Start ***** -->
 	<section class="breadcumb-area bg-img gradient-background-overlay"
 		style="background-image: url(/img/bg-img/breadcumb1.jpg);">
@@ -41,7 +41,7 @@
 					<div class="breadcumb-content">
 						<h3 class="breadcumb-title">View Applications</h3>
 						<p>All Applications Details</p>
-						<p>${Msg}</p>
+						<p>${msg}</p>
 					</div>
 				</div>
 			</div>
@@ -58,9 +58,7 @@
 					<div class="panel panel-default">
 						<div class="panel-heading">All Account Details</div>
 						<div class="panel-body">
-							<table id="dHV"
-								class="display table table-striped table-bordered table-hover"
-								cellspacing="0" width="100%" >
+							<table id="example" class="display" style="width: 100%">
 								<thead>
 									<tr>
 										<th>SNo.</th>
@@ -101,20 +99,16 @@
 											<td>${tempApp.gender}</td>
 											<td>${tempApp.phoneNumber}</td>
 											<td><a href="${updateLink}" title="View Full Details"
-												class="fa fa-edit"></a>&nbsp;&nbsp;&nbsp;&nbsp; 
-											<c:choose>
+												class="fa fa-edit"></a>&nbsp;&nbsp;&nbsp;&nbsp; <c:choose>
 													<c:when test="${tempApp.deleteStatus == true}">
-														<a href="${UndoDeleteLink}" title= "Retreive Application"
-															onclick="return confirm("Doyouwanttodelete");"><i
-															class="fa fa-exchange" style="color: green;"></i></a></td>
-											</c:when>
-											<c:when test="${tempApp.deleteStatus == false}">
-												<a href="${DeleteLink}" title="Delete Application"
-													onclick="return confirm("Doyouwanttodelete");"><i
-													class="fa fa-trash-o" style="color: red;"></i></a>
-												</td>
-											</c:when>
-											</c:choose>
+														<a href="${UndoDeleteLink}" title="Retreive Application"><i
+															class="fa fa-exchange" style="color: green;"></i></a>
+													</c:when>
+													<c:when test="${tempApp.deleteStatus == false}">
+														<a href="${DeleteLink}" title="Delete Application"><i
+															class="fa fa-trash-o" style="color: red;"></i></a>
+													</c:when>
+												</c:choose></td>
 										</tr>
 									</c:forEach>
 								</tbody>
@@ -131,19 +125,21 @@
 	<!-- ***** Footer Area Start ***** -->
 	<footer class="footer-area section-padding-100">
 		<!-- Bottom Footer Area -->
-<%@include file="footer.jsp"%>
+		<%@include file="footer.jsp"%>
+	</footer>
 	<!-- ***** Footer Area End ***** -->
 
 	<!-- jQuery (Necessary for All JavaScript Plugins) -->
 	<script
-		src="${pageContext.request.contextPath}/js/jquery/jquery-2.2.4.min.js"></script>
+		src="${pageContext.request.contextPath}/js/jquery/jquery-3.5.1.js"></script>
 	<script
 		src="${pageContext.request.contextPath}/js/jquery/jquery.dataTables.min.js"></script>
 	<!-- Popper js -->
 	<script src="${pageContext.request.contextPath}/js/popper.min.js"></script>
 	<!-- Bootstrap js -->
+
 	<script
-		src="${pageContext.request.contextPath}/js/dataTables.bootstrap.min.js"></script>
+		src="${pageContext.request.contextPath}/js/jquery/dataTables.jqueryui.min.js"></script>
 	<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
 	<!-- Plugins js -->
 	<script src="${pageContext.request.contextPath}/js/plugins.js"></script>

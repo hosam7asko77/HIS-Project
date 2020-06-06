@@ -1,20 +1,17 @@
 package com.usa.his.gov.user.service.impl;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.User.UserBuilder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -291,6 +288,22 @@ public class HisUserDtlsServiceImpl implements HisUserDtlsService {
 				true, 
 				new ArrayList<>());
 				*/
+	}
+
+	@Override
+	public String getPublicId()throws HisException {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null) {
+            Object principal = auth.getPrincipal();
+            if (principal instanceof User) {
+                String useremail = ((User) principal).getUsername();
+                return dtlsRepository.findPublicId(useremail);
+                
+            	//model.addAttribute("userDetails",((User) principal).getUsername());
+            }
+		return null;
+	}
+		return null;
 	}
 
 }
