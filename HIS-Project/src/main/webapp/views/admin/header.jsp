@@ -60,23 +60,10 @@
 												href="/AppRegister/showSearchPage">Search For Case </a> <a
 												class="dropdown-item" href="/DC/viewAllCases">View
 												Case</a>
-											<li class="nav-item"><a class="nav-link"
-												href="services.html">Services</a></li>
-											<li class="nav-item"><a class="nav-link"
-												href="blog.html">News</a></li>
+											</div>
 											<c:if test="${auth=='ROLE_Admin'}">
-												<li class="nav-item dropdown"><a
-													class="nav-link dropdown-toggle" href="#"
-													id="navbarDropdown" role="button" data-toggle="dropdown"
-													aria-haspopup="true" aria-expanded="false">Admin</a>
-													<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-														<a class="dropdown-item" href="/Admin/Manager/showForm">Create
-															Account</a> <a class="dropdown-item"
-															href="/Admin/Manager/viewUsers">View Accounts</a> <a
-															class="dropdown-item" href="/Admin/Plan/showPlanForm">Create
-															Plan</a> <a class="dropdown-item"
-															href="/Admin/Plan/viewPlans">View Plan</a>
-													</div></li>
+												<li class="nav-item"><a class="nav-link"
+												href="/Admin/">Admin</a></li>
 											</c:if>
 											<li class="nav-item"><form:form
 													action="${pageContext.request.contextPath}/logout"

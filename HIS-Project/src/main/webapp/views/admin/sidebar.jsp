@@ -23,27 +23,15 @@
             </a>
           </li>
           <li class="nav-item ">
-            <a class="nav-link" href="#">
-              <i class="material-icons">library_books</i>
-              <p>Typography</p>
+            <a class="nav-link" href="/Admin/batch">
+              <i class="material-icons" style="color: white;">library_books</i>
+              <p>Batch</p>
             </a>
           </li>
           <li class="nav-item ">
             <a class="nav-link" href="#">
-              <i class="material-icons">bubble_chart</i>
+              <i class="material-icons" style="color: white;">bubble_chart</i>
               <p>Icons</p>
-            </a>
-          </li>
-          <li class="nav-item ">
-            <a class="nav-link" href="#">
-              <i class="material-icons">location_ons</i>
-              <p>Maps</p>
-            </a>
-          </li>
-          <li class="nav-item ">
-            <a class="nav-link" href="#">
-              <i class="material-icons">notifications</i>
-              <p>Notifications</p>
             </a>
           </li>
           <!-- <li class="nav-item active-pro ">
