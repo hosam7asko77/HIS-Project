@@ -11,5 +11,12 @@ public interface SSNRestClientService {
 	 * @throws HisException
 	 */
 	public SSNClientResponse vaildationSSN(String SSN)throws HisException;
+	/**
+	 * this 
+	 * @param SSN
+	 * @return
+	 * @throws HisException
+	 */
+	public SSNClientResponse runBatch()throws HisException;
 
 }

@@ -297,11 +297,14 @@ public class HISDCController {
 		HisCaseDtls caseDetails = caseService.getCaseDetails(caseNumber);
 		System.out.println(caseDetails);
 		HisFamilyDtls familyDtls = caseService.getFamilyByCase(caseNumber);
-		HisJobDtls jobDtls = caseService.getJobByCaseNumber(caseNumber);
+		HisCasePlan casePlan = caseService.getCasePlanByCaseNumber(caseNumber);
+		if (!casePlan.getPlanName().equalsIgnoreCase("SNAP")) {
+			HisJobDtls jobDtls = caseService.getJobByCaseNumber(caseNumber);
+			model.addAttribute(JOB_DETAILS, jobDtls);
+		}
 		HisCrimeDtls crimeDtls = caseService.getCrimeDtls(caseNumber);
 		model.addAttribute(CASE_DETAILS, caseDetails);
 		model.addAttribute(FAMILY_DETAILS, familyDtls);
-		model.addAttribute(JOB_DETAILS, jobDtls);
 		model.addAttribute(CRIME_DETAILS, crimeDtls);
 		if (familyDtls.getHaveChild()) {
 			List<HisKidsDtls> allKids = caseService.getAllKids(caseNumber);

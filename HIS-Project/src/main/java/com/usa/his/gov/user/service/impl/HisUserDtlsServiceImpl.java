@@ -84,13 +84,12 @@ public class HisUserDtlsServiceImpl implements HisUserDtlsService {
 		userDtls.setStatus(false);
 		BeanUtils.copyProperties(userDtls, hisUserDtlsEntity);
 		log.info("newHisUser() method send email block start");
-		boolean flag = send.sendTempPasswordToEmail(userDtls);
-		if (flag) {
+//		boolean flag = send.sendTempPasswordToEmail(userDtls);
+//		if (flag) {
 			log.info("newHisUser() method send email block end");
 			HisUserDtlsEntity saveEntity = dtlsRepository.save(hisUserDtlsEntity);
 			log.info("newHisUser() method save block start");
 			if (saveEntity != null) {
-
 				BeanUtils.copyProperties(saveEntity, userDtls);
 				log.info("newHisUser() method save block end sucess");
 				log.info("HisUserDtlsServiceImpl newHisUser() method end");
@@ -101,9 +100,9 @@ public class HisUserDtlsServiceImpl implements HisUserDtlsService {
 				throw new HisException("error data not added plase try agane leater");
 			}
 
-		} else {
-			throw new HisException("error when send email");
-		}
+//		} else {
+//			throw new HisException("error when send email");
+//		}
 
 	}
 

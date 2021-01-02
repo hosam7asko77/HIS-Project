@@ -185,5 +185,9 @@ public class HisAdminController {
 		log.info("HisPlanController deletePaln() method end");
 		return AdminControllerConstant.REDIRECT_TO_DASHBOARD;
 	}
+	@GetMapping("batch")
+	public String showBatch () throws HisException{
+		return AdminControllerConstant.BATCH;
+	}
 
 }

@@ -31,6 +31,7 @@ public class SSNRestClientImpl implements SSNRestClientService {
 	@Autowired
 	private RestTemplate restTemplate;
 	private static final String SSN_RESTAPI_GET_BY_SSN_URL = "http://localhost:5050/verifySSN?ssn=";
+	private static final String SSN_RESTAPI_STAT_BATCH_URL = "http://localhost:7070/start-batch";
 	@Override
 	public SSNClientResponse vaildationSSN(String SSN) throws HisException {
 		log.info("SSNRestClientImpl vaildationSSN() method start");
@@ -45,6 +46,20 @@ public class SSNRestClientImpl implements SSNRestClientService {
 			throw new HisException();
 		}
 		
+	}
+	@Override
+	public SSNClientResponse runBatch() throws HisException {
+		log.info("SSNRestClientImpl runBatch() method start");
+		ResponseEntity<SSNClientResponse> responseEntity=restTemplate.getForEntity(SSN_RESTAPI_STAT_BATCH_URL, SSNClientResponse.class);
+		int statusCode=responseEntity.getStatusCode().value();
+		if (statusCode==200) {
+			 SSNClientResponse getResponseBody = responseEntity.getBody();
+			log.info("SSNRestClientImpl runBatch() method end");
+			return getResponseBody;
+		}else {
+			log.info("SSNRestClientImpl runBatch() method with exception");
+			throw new HisException();
+		}
 	}
 
 }

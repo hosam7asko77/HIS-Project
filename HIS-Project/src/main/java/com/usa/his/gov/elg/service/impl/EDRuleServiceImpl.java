@@ -38,6 +38,7 @@ public class EDRuleServiceImpl implements EDRuleRestClientService {
 		BeanUtils.copyProperties(sendEDRequest, elgDetailsEntity);
 		ElgDetailsEntity returnValue = elgRepo.save(elgDetailsEntity);
 		System.out.println(returnValue);
+		
 		if (returnValue != null && saveCdTrigger(caseNumber)) {
 			BeanUtils.copyProperties(returnValue, sendEDRequest);
 			return sendEDRequest;			

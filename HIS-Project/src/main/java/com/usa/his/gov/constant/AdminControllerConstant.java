@@ -27,6 +27,6 @@ public class AdminControllerConstant {
 	public static final String MSG = "msg";
 	public static final String APP_NO = "appNo";
 	public static final String CASE_NO = "caseNo";
-	
+	public static final String BATCH = "admin/batch-page";
 
 }

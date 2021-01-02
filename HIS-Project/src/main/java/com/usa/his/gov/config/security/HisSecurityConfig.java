@@ -47,7 +47,7 @@ public class HisSecurityConfig extends WebSecurityConfigurerAdapter {
 				.permitAll().antMatchers(HisConstant.SET_PASSWORD_PROCESS_URL).permitAll()
 				.antMatchers(HisConstant.SHOW_SET_PASSWORD_URL).permitAll().antMatchers("/RestApi/**").permitAll().antMatchers("/")
 				.hasAnyRole(HisConstant.ADMIN, HisConstant.WORKER).antMatchers("/Admin/**").hasRole(HisConstant.ADMIN)
-				.anyRequest().authenticated().and().formLogin().loginPage("/login")
+				.anyRequest().permitAll().and().formLogin().loginPage("/login")
 				.loginProcessingUrl("/authenticateTheUser").permitAll().and().logout().invalidateHttpSession(true).permitAll().and()
 				.exceptionHandling().accessDeniedPage("/accessDenied");
 		

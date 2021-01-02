@@ -14,7 +14,7 @@
 <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
 <!-- Title  -->
-<title>HIS System - Health &amp; Medical Template | Contact</title>
+<title>HIS System - Health &amp; </title>
 
 <!-- Favicon  -->
 <link rel="icon"
